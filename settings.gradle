@@ -1,0 +1,15 @@
+pluginManagement {
+    repositories {
+        maven {
+            url = "${artifactory_resolveUrl}"
+            allowInsecureProtocol = true
+        }
+        maven {
+            url = "${artifactory_resolveBigDataUrl}"
+            allowInsecureProtocol = true
+        }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'demo-project'

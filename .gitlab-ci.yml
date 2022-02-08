@@ -1,0 +1,79 @@
+############## workflow rules
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+      variables:
+        JFROG_ARTIFACT_ENV: "prod"
+    - if: $CI_MERGE_REQUEST_ID
+      variables:
+        JFROG_ARTIFACT_ENV: "dev"
+    - when: never
+
+############## include
+include:
+  - project: DevOps/cicd-store/gitlabci/vault
+    ref: v3
+    file: 
+      - .base_devops_get_cicd_secrets.yml
+
+  - project: 'DevOps/cicd-store/gitlabci/docker'
+    ref: v5
+    file: .base_docker_build.yml
+
+############## job templates
+.base_gradlew:
+  image: ${CI_REGISTRY}/bigdata/platform/docker-images/java/liberica-openjdk-ol7slim:17.0.1
+  variables: 
+    APP_JAR_NAME: "${CI_PROJECT_NAME}"
+
+############## stages & jobs
+stages:
+  - .prepare
+  - get_version
+  - build_jar
+
+###############
+devops_get_cicd_secrets:
+  extends: .base_devops_get_cicd_secrets
+  stage: .prepare
+
+get_version:
+  extends: .base_gradlew
+  stage: get_version
+  script:
+    - if ${CICD_STORE_DEBUG}; then set -x; else set +x; fi
+
+    - ./gradlew properties -q | grep -i "version:" | awk '{print $2}'
+
+    - 'VERSION=$(./gradlew properties -q | grep -i "version:" | awk "{print \$2}")'
+    - VERSION_LOWERCASE=$( echo "${VERSION}" | tr '[[:upper:]]' '[[:lower:]]')
+
+    - echo "APP_VERSION_UPPERCASE=${VERSION}" >> get_version.env
+    - echo "APP_VERSION=${VERSION_LOWERCASE}" >> get_version.env
+
+    - echo "app version is ${VERSION}"
+  artifacts:
+    reports:
+      dotenv: get_version.env
+    expire_in: 6000 seconds
+
+build_jar:
+  extends: .base_gradlew
+  stage: build_jar
+  dependencies:
+    - get_version
+  script:
+    - if ${CICD_STORE_DEBUG}; then set -x; else set +x; fi
+    - ./gradlew build
+    - ls -al build/libs/
+  after_script:
+    - cp build/libs/*.jar .
+    - ls -al
+    - cp ${CI_PROJECT_NAME}-${APP_VERSION_UPPERCASE}.jar ${CI_PROJECT_NAME}-${APP_VERSION}.jar
+  services:
+    - name: $CI_REGISTRY/docker-dind-tools:1.1.1
+      alias: docker
+  artifacts:
+    paths:
+      - build/
+      - $CI_PROJECT_NAME-$APP_VERSION.jar

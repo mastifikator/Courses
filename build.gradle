@@ -1,0 +1,46 @@
+plugins {
+	id 'java'
+}
+
+group = 'com.mts.teta'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	maven {
+		url "${artifactory_resolveUrl}"
+		allowInsecureProtocol true
+	}
+	maven {
+		url "${artifactory_resolveBigDataUrl}"
+		allowInsecureProtocol true
+	}
+	maven {
+		url "${artifactory_gradlepluginsURL}"
+		allowInsecureProtocol true
+	}
+	mavenCentral()
+}
+
+dependencies {
+	testImplementation(platform('org.junit:junit-bom:5.8.2'))
+	testImplementation('org.junit.jupiter:junit-jupiter')
+}
+
+test {
+	useJUnitPlatform()
+	testLogging {
+		showExceptions = true
+		showStandardStreams = false
+		showCauses = true
+		showStackTraces = true
+		exceptionFormat = "full"
+		events("skipped", "failed", "passed")
+	}
+}
