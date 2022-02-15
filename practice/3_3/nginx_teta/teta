@@ -1,0 +1,15 @@
+server {
+	listen 8890 default_server;
+	listen [::]:8890 default_server;
+
+	root /var/www/html;
+
+	index index.html;
+
+	server_name www.nginx-teta.com;
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+
+}
