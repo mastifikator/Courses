@@ -18,23 +18,23 @@ public class EnrichmentService {
 
     private final MessageValidator validator;
     private final UserDatabase database;
-    private final BlockingQueue<String> successfullyEnrichedMessage;
-    private final BlockingQueue<String> unsuccessfullyEnrichedMessage;
+    private final BlockingQueue<String> successfullyEnrichedMessages;
+    private final BlockingQueue<String> unsuccessfullyEnrichedMessages;
 
     public EnrichmentService(MessageValidator validator,
                              UserDatabase database,
-                             BlockingQueue<String> successfullyEnrichedMessage,
-                             BlockingQueue<String> unsuccessfullyEnrichedMessage){
+                             BlockingQueue<String> successfullyEnrichedMessages,
+                             BlockingQueue<String> unsuccessfullyEnrichedMessages){
         this.validator = validator;
         this.database = database;
-        this.successfullyEnrichedMessage = successfullyEnrichedMessage;
-        this.unsuccessfullyEnrichedMessage = unsuccessfullyEnrichedMessage;
+        this.successfullyEnrichedMessages = successfullyEnrichedMessages;
+        this.unsuccessfullyEnrichedMessages = unsuccessfullyEnrichedMessages;
     }
 
     public String enrich(MessageDto messageDto) throws InterruptedException{
 
         if(!validator.validate(messageDto.getContent())){
-            unsuccessfullyEnrichedMessage.put(messageDto.getContent());
+            unsuccessfullyEnrichedMessages.put(messageDto.getContent());
             return messageDto.getContent();
         }
 
@@ -44,7 +44,7 @@ public class EnrichmentService {
             messageContent = objectMapper.readValue(messageDto.getContent(), MessageContent.class);
         }catch (JsonProcessingException j){
             LOG.debug("deserialization error" + j.getMessage());
-            unsuccessfullyEnrichedMessage.put(messageDto.getContent());
+            unsuccessfullyEnrichedMessages.put(messageDto.getContent());
             return messageDto.getContent();
         }
 
@@ -52,7 +52,7 @@ public class EnrichmentService {
         messageContent.setEnrichment(new EnrichmentName(actualUser.getFirstName(), actualUser.getLastName()));
 
         try {
-            successfullyEnrichedMessage.put(objectMapper.writeValueAsString(messageContent));
+            successfullyEnrichedMessages.put(objectMapper.writeValueAsString(messageContent));
         }catch (JsonProcessingException j){
             LOG.debug("serialization error" + j.getMessage());
         }

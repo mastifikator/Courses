@@ -9,21 +9,21 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EnrichmentServiceTest extends AbstractEnvironmentSetup {
 
-    @Test
-    public void testEnrich() throws InterruptedException {
-        int numberOfThreads = 10;
-        ExecutorService service = Executors.newFixedThreadPool(10);
-        CountDownLatch latch = new CountDownLatch(10);
+    private static final int THREAD_COUNT = 99;
 
-            for (int i = 0; i < numberOfThreads; i++) {
-                final String msisdn = Integer.toString(i);
+    @Test
+    public void testSuccessfullyEnrich() throws InterruptedException {
+        ExecutorService service = Executors.newFixedThreadPool(THREAD_COUNT);
+        CountDownLatch latch = new CountDownLatch(THREAD_COUNT);
+
+            for (int i = 0; i < THREAD_COUNT; i++) {
+                String msisdn = Integer.toString(i);
                 service.submit(() -> {
                     try {
-
                         MessageContent messageContent = new MessageContent("action", "bookCard", msisdn);
                         MessageDto messageDto = new MessageDto(objectMapper.writeValueAsString(messageContent), EnrichmentType.MSISDN);
 
@@ -47,15 +47,43 @@ public class EnrichmentServiceTest extends AbstractEnvironmentSetup {
 
         latch.await();
 
-        System.out.println("Successfully Message: ");
-            while(!successfullyEnrichedMessage.isEmpty()){
-                System.out.println(successfullyEnrichedMessage.take());
-            }
-
-        System.out.println("Unsuccessfully Message: ");
-            while(!unsuccessfullyEnrichedMessage.isEmpty()){
-                System.out.println(unsuccessfullyEnrichedMessage.take());
-            }
-
+            assertEquals(successfullyEnrichedMessages.size(), THREAD_COUNT);
     }
+
+    @Test
+    public void testUnsuccessfullyEnrich() throws InterruptedException {
+        ExecutorService service = Executors.newFixedThreadPool(THREAD_COUNT);
+        CountDownLatch latch = new CountDownLatch(THREAD_COUNT);
+
+        for (int i = 0; i < THREAD_COUNT; i++) {
+            String msisdn = i + "error";
+            service.submit(() -> {
+                try {
+                    MessageContent messageContent = new MessageContent("anotherAction", "anotherBookCard", msisdn);
+                    MessageDto messageDto = new MessageDto(objectMapper.writeValueAsString(messageContent), EnrichmentType.MSISDN);
+
+                    String enrichedMessage = enrichmentService.enrich(messageDto);
+
+                    MessageContent resultMessage = objectMapper.readValue(enrichedMessage, MessageContent.class);
+                    EnrichmentName resultEnrichment = new EnrichmentName("", "");
+
+                    assertEquals(resultMessage.getMsisdn(), messageContent.getMsisdn());
+                    assertEquals(resultMessage.getAction(), messageContent.getAction());
+                    assertEquals(resultMessage.getEnrichment(), resultEnrichment);
+
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } catch (JsonProcessingException j){
+                    LOG.debug("serialize error" + j.getMessage());
+                }
+                latch.countDown();
+            });
+        }
+
+        latch.await();
+
+        assertEquals(unsuccessfullyEnrichedMessages.size(), THREAD_COUNT);
+    }
+
+
 }
