@@ -1,6 +1,6 @@
-package database;
+package com.mts.teta.enricher.database;
 
-import models.User;
+import com.mts.teta.enricher.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,18 +12,18 @@ public class InMemoryUserDatabase implements UserDatabase {
     private final ConcurrentHashMap<String, User> userDb = new ConcurrentHashMap<>();
 
     @Override
-    public void addUser(String key, User user){
+    public void addUser(String key, User user) {
         userDb.put(key, user);
         LOG.debug("add user " + user);
     }
 
     @Override
-    public User getUser(String key){
+    public User getUser(String key) {
         return userDb.get(key);
     }
 
     @Override
-    public boolean checkUser(String key){
+    public boolean checkUser(String key) {
         return userDb.containsKey(key);
     }
 }

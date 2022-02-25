@@ -1,6 +1,4 @@
-package models;
-
-import java.util.Objects;
+package com.mts.teta.enricher.models;
 
 public class User {
     private String firstName;

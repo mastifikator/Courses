@@ -1,4 +1,4 @@
-package models;
+package com.mts.teta.enricher.models;
 
 import java.util.Objects;
 

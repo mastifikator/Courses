@@ -1,13 +1,15 @@
+package com.mts.teta.enricher;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import database.UserDatabase;
-import models.EnrichmentName;
-import models.MessageContent;
-import models.MessageDto;
-import models.User;
+import com.mts.teta.enricher.database.UserDatabase;
+import com.mts.teta.enricher.models.EnrichmentName;
+import com.mts.teta.enricher.models.MessageContent;
+import com.mts.teta.enricher.models.MessageDto;
+import com.mts.teta.enricher.models.User;
+import com.mts.teta.enricher.validators.MessageValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import validators.MessageValidator;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -24,16 +26,16 @@ public class EnrichmentService {
     public EnrichmentService(MessageValidator validator,
                              UserDatabase database,
                              BlockingQueue<String> successfullyEnrichedMessages,
-                             BlockingQueue<String> unsuccessfullyEnrichedMessages){
+                             BlockingQueue<String> unsuccessfullyEnrichedMessages) {
         this.validator = validator;
         this.database = database;
         this.successfullyEnrichedMessages = successfullyEnrichedMessages;
         this.unsuccessfullyEnrichedMessages = unsuccessfullyEnrichedMessages;
     }
 
-    public String enrich(MessageDto messageDto) throws InterruptedException{
+    public String enrich(MessageDto messageDto) throws InterruptedException {
 
-        if(!validator.validate(messageDto.getContent())){
+        if (!validator.validate(messageDto.getContent())) {
             unsuccessfullyEnrichedMessages.put(messageDto.getContent());
             return messageDto.getContent();
         }
@@ -42,7 +44,7 @@ public class EnrichmentService {
 
         try {
             messageContent = objectMapper.readValue(messageDto.getContent(), MessageContent.class);
-        }catch (JsonProcessingException j){
+        } catch (JsonProcessingException j) {
             LOG.debug("deserialization error" + j.getMessage());
             unsuccessfullyEnrichedMessages.put(messageDto.getContent());
             return messageDto.getContent();
@@ -53,7 +55,7 @@ public class EnrichmentService {
 
         try {
             successfullyEnrichedMessages.put(objectMapper.writeValueAsString(messageContent));
-        }catch (JsonProcessingException j){
+        } catch (JsonProcessingException j) {
             LOG.debug("serialization error" + j.getMessage());
         }
 

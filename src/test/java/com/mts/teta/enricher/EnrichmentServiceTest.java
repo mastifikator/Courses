@@ -1,8 +1,10 @@
+package com.mts.teta.enricher;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
-import enums.EnrichmentType;
-import models.EnrichmentName;
-import models.MessageContent;
-import models.MessageDto;
+import com.mts.teta.enricher.enums.EnrichmentType;
+import com.mts.teta.enricher.models.EnrichmentName;
+import com.mts.teta.enricher.models.MessageContent;
+import com.mts.teta.enricher.models.MessageDto;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CountDownLatch;
@@ -20,34 +22,34 @@ public class EnrichmentServiceTest extends AbstractEnvironmentSetup {
         ExecutorService service = Executors.newFixedThreadPool(THREAD_COUNT);
         CountDownLatch latch = new CountDownLatch(THREAD_COUNT);
 
-            for (int i = 0; i < THREAD_COUNT; i++) {
-                String msisdn = Integer.toString(i);
-                service.submit(() -> {
-                    try {
-                        MessageContent messageContent = new MessageContent("action", "bookCard", msisdn);
-                        MessageDto messageDto = new MessageDto(objectMapper.writeValueAsString(messageContent), EnrichmentType.MSISDN);
+        for (int i = 0; i < THREAD_COUNT; i++) {
+            String msisdn = Integer.toString(i);
+            service.submit(() -> {
+                try {
+                    MessageContent messageContent = new MessageContent("action", "bookCard", msisdn, new EnrichmentName("", ""));
+                    MessageDto messageDto = new MessageDto(objectMapper.writeValueAsString(messageContent), EnrichmentType.MSISDN);
 
-                        String enrichedMessage = enrichmentService.enrich(messageDto);
+                    String enrichedMessage = enrichmentService.enrich(messageDto);
 
-                        MessageContent resultMessage = objectMapper.readValue(enrichedMessage, MessageContent.class);
-                        EnrichmentName resultEnrichment = new EnrichmentName(msisdn, msisdn + msisdn + msisdn);
+                    MessageContent resultMessage = objectMapper.readValue(enrichedMessage, MessageContent.class);
+                    EnrichmentName resultEnrichment = new EnrichmentName(msisdn, msisdn + msisdn + msisdn);
 
-                        assertEquals(resultMessage.getMsisdn(), messageContent.getMsisdn());
-                        assertEquals(resultMessage.getAction(), messageContent.getAction());
-                        assertEquals(resultMessage.getEnrichment(), resultEnrichment);
+                    assertEquals(resultMessage.getMsisdn(), messageContent.getMsisdn());
+                    assertEquals(resultMessage.getAction(), messageContent.getAction());
+                    assertEquals(resultMessage.getEnrichment(), resultEnrichment);
 
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    } catch (JsonProcessingException j){
-                        LOG.debug("serialize error" + j.getMessage());
-                    }
-                    latch.countDown();
-                });
-            }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } catch (JsonProcessingException j) {
+                    LOG.debug("serialize error" + j.getMessage());
+                }
+                latch.countDown();
+            });
+        }
 
         latch.await();
 
-            assertEquals(successfullyEnrichedMessages.size(), THREAD_COUNT);
+        assertEquals(successfullyEnrichedMessages.size(), THREAD_COUNT);
     }
 
     @Test
@@ -59,7 +61,7 @@ public class EnrichmentServiceTest extends AbstractEnvironmentSetup {
             String msisdn = i + "error";
             service.submit(() -> {
                 try {
-                    MessageContent messageContent = new MessageContent("anotherAction", "anotherBookCard", msisdn);
+                    MessageContent messageContent = new MessageContent("anotherAction", "anotherBookCard", msisdn, new EnrichmentName("", ""));
                     MessageDto messageDto = new MessageDto(objectMapper.writeValueAsString(messageContent), EnrichmentType.MSISDN);
 
                     String enrichedMessage = enrichmentService.enrich(messageDto);
@@ -73,7 +75,7 @@ public class EnrichmentServiceTest extends AbstractEnvironmentSetup {
 
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                } catch (JsonProcessingException j){
+                } catch (JsonProcessingException j) {
                     LOG.debug("serialize error" + j.getMessage());
                 }
                 latch.countDown();

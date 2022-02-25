@@ -1,11 +1,12 @@
-package validators;
+package com.mts.teta.enricher.validators;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import database.InMemoryUserDatabase;
-import database.UserDatabase;
-import models.MessageContent;
-import models.User;
+import com.mts.teta.enricher.database.InMemoryUserDatabase;
+import com.mts.teta.enricher.database.UserDatabase;
+import com.mts.teta.enricher.models.EnrichmentName;
+import com.mts.teta.enricher.models.MessageContent;
+import com.mts.teta.enricher.models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -24,14 +25,14 @@ class MsisdnValidatorTest {
     protected MessageValidator validator;
 
     @BeforeEach
-    public void prepareEnvironment(){
+    public void prepareEnvironment() {
         db = new InMemoryUserDatabase();
         objectMapper = new ObjectMapper();
         LOG = LoggerFactory.getLogger(MsisdnValidatorTest.class);
 
         validator = new MsisdnValidator(db);
 
-        for(int i = 0; i < USER_AMOUNT; i++){
+        for (int i = 0; i < USER_AMOUNT; i++) {
             String amount = Integer.toString(i);
             db.addUser(amount, new User(amount, amount + amount + amount));
             LOG.debug("added user: " + db.getUser(amount));
@@ -40,21 +41,21 @@ class MsisdnValidatorTest {
 
     @Test
     public void successfullyValidateTest() throws JsonProcessingException {
-        MessageContent messageContent = new MessageContent("action", "bookCard", "1");
+        MessageContent messageContent = new MessageContent("action", "bookCard", "1", new EnrichmentName("", ""));
 
         assertTrue(validator.validate(objectMapper.writeValueAsString(messageContent)));
     }
 
     @Test
-    public void jsonUnsuccessfullyValidateTest(){
+    public void jsonUnsuccessfullyValidateTest() {
         String wrongJson = "{'action':'action', 'page':'bookCard'}";
 
         assertFalse(validator.validate(wrongJson));
     }
 
     @Test
-    public void databaseUnsuccessfullyValidateTest() throws JsonProcessingException{
-        MessageContent messageContent = new MessageContent("action", "bookCard", Integer.toString(USER_AMOUNT));
+    public void databaseUnsuccessfullyValidateTest() throws JsonProcessingException {
+        MessageContent messageContent = new MessageContent("action", "bookCard", Integer.toString(USER_AMOUNT), new EnrichmentName("", ""));
 
         assertFalse(validator.validate(objectMapper.writeValueAsString(messageContent)));
     }

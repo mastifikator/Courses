@@ -1,13 +1,15 @@
+package com.mts.teta.enricher;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import database.InMemoryUserDatabase;
-import database.UserDatabase;
-import models.User;
+import com.mts.teta.enricher.database.InMemoryUserDatabase;
+import com.mts.teta.enricher.database.UserDatabase;
+import com.mts.teta.enricher.models.User;
+import com.mts.teta.enricher.validators.MessageValidator;
+import com.mts.teta.enricher.validators.MsisdnValidator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import validators.MessageValidator;
-import validators.MsisdnValidator;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -24,11 +26,11 @@ public abstract class AbstractEnvironmentSetup {
     protected Logger LOG;
 
     @BeforeEach
-    public void prepareDatabase(){
+    public void prepareDatabase() {
         db = new InMemoryUserDatabase();
         LOG = LoggerFactory.getLogger(AbstractEnvironmentSetup.class);
 
-        for(int i = 0; i < USER_AMOUNT; i++){
+        for (int i = 0; i < USER_AMOUNT; i++) {
             String amount = Integer.toString(i);
             db.addUser(amount, new User(amount, amount + amount + amount));
             LOG.debug("added user: " + db.getUser(amount));
@@ -46,15 +48,15 @@ public abstract class AbstractEnvironmentSetup {
     }
 
     @AfterEach
-    public void clearQueue() throws InterruptedException{
+    public void clearQueue() throws InterruptedException {
 
         System.out.println("Successfully Message: ");
-        while(!successfullyEnrichedMessages.isEmpty()){
+        while (!successfullyEnrichedMessages.isEmpty()) {
             System.out.println(successfullyEnrichedMessages.take());
         }
 
         System.out.println("Unsuccessfully Message: ");
-        while(!unsuccessfullyEnrichedMessages.isEmpty()){
+        while (!unsuccessfullyEnrichedMessages.isEmpty()) {
             System.out.println(unsuccessfullyEnrichedMessages.take());
         }
     }

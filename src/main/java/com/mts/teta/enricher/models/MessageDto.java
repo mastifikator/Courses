@@ -1,6 +1,7 @@
-package models;
+package com.mts.teta.enricher.models;
 
-import enums.EnrichmentType;
+
+import com.mts.teta.enricher.enums.EnrichmentType;
 
 public class MessageDto {
     private String content;

@@ -1,4 +1,4 @@
-package models;
+package com.mts.teta.enricher.models;
 
 public class MessageContent {
     private String action;
@@ -6,14 +6,7 @@ public class MessageContent {
     private String msisdn;
     private EnrichmentName enrichment;
 
-    public MessageContent(){}
-
-    public MessageContent(String action, String page, String msisdn) {
-        this.action = action;
-
-        this.page = page;
-        this.msisdn = msisdn;
-        this.enrichment = new EnrichmentName("","");
+    public MessageContent() {
     }
 
     public MessageContent(String action, String book_card, String msisdn, EnrichmentName enrichment) {

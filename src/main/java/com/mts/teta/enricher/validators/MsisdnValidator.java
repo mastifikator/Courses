@@ -1,9 +1,9 @@
-package validators;
+package com.mts.teta.enricher.validators;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import database.UserDatabase;
-import models.MessageContent;
+import com.mts.teta.enricher.database.UserDatabase;
+import com.mts.teta.enricher.models.MessageContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +13,7 @@ public class MsisdnValidator implements MessageValidator {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Logger LOG = LoggerFactory.getLogger(MsisdnValidator.class);
 
-    public MsisdnValidator(UserDatabase database){
+    public MsisdnValidator(UserDatabase database) {
         this.database = database;
     }
 
@@ -22,18 +22,18 @@ public class MsisdnValidator implements MessageValidator {
 
         MessageContent messageContent;
 
-        try{
+        try {
             messageContent = objectMapper.readValue(message, MessageContent.class);
             LOG.debug("success validating " + messageContent);
-        }catch (JsonProcessingException | IllegalArgumentException j){
+        } catch (JsonProcessingException | IllegalArgumentException j) {
             LOG.debug("validating error " + j.getMessage());
             return false;
         }
 
-        if(database.checkUser(messageContent.getMsisdn())){
+        if (database.checkUser(messageContent.getMsisdn())) {
             LOG.debug("user for " + messageContent.getMsisdn() + " found");
             return true;
-        }else{
+        } else {
             LOG.debug("user for " + messageContent.getMsisdn() + " not found");
             return false;
         }
