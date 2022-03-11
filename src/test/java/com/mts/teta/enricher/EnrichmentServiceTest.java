@@ -38,8 +38,6 @@ public class EnrichmentServiceTest extends AbstractEnvironmentSetup {
                     assertEquals(resultMessage.getAction(), messageContent.getAction());
                     assertEquals(resultMessage.getEnrichment(), resultEnrichment);
 
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
                 } catch (JsonProcessingException j) {
                     LOG.debug("serialize error" + j.getMessage());
                 }
@@ -73,8 +71,6 @@ public class EnrichmentServiceTest extends AbstractEnvironmentSetup {
                     assertEquals(resultMessage.getAction(), messageContent.getAction());
                     assertEquals(resultMessage.getEnrichment(), resultEnrichment);
 
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
                 } catch (JsonProcessingException j) {
                     LOG.debug("serialize error" + j.getMessage());
                 }

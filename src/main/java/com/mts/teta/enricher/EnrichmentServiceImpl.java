@@ -11,7 +11,7 @@ import com.mts.teta.enricher.validators.MessageValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EnrichmentServiceImpl implements EnrichmentService {
 
@@ -20,25 +20,24 @@ public class EnrichmentServiceImpl implements EnrichmentService {
 
     private final MessageValidator validator;
     private final UserDatabase database;
-    private final BlockingQueue<String> successfullyEnrichedMessages;
-    private final BlockingQueue<String> unsuccessfullyEnrichedMessages;
+    private final CopyOnWriteArrayList<String> successfullyEnrichedMessages;
+    private final CopyOnWriteArrayList<String> unsuccessfullyEnrichedMessages;
 
     public EnrichmentServiceImpl(MessageValidator validator,
                                  UserDatabase database,
-                                 BlockingQueue<String> successfullyEnrichedMessages,
-                                 BlockingQueue<String> unsuccessfullyEnrichedMessages) {
+                                 CopyOnWriteArrayList<String> successfullyEnrichedMessages,
+                                 CopyOnWriteArrayList<String> unsuccessfullyEnrichedMessages) {
         this.validator = validator;
         this.database = database;
         this.successfullyEnrichedMessages = successfullyEnrichedMessages;
         this.unsuccessfullyEnrichedMessages = unsuccessfullyEnrichedMessages;
     }
 
-    public String enrich(MessageDto messageDto) throws InterruptedException {
-
+    public String enrich(MessageDto messageDto) {
         MessageContent messageContent = validator.validate(messageDto.getContent());
 
         if (messageContent == null) {
-            unsuccessfullyEnrichedMessages.put(messageDto.getContent());
+            unsuccessfullyEnrichedMessages.add(messageDto.getContent());
             return messageDto.getContent();
         }
 
@@ -54,7 +53,7 @@ public class EnrichmentServiceImpl implements EnrichmentService {
             return messageDto.getContent();
         }
 
-        successfullyEnrichedMessages.put(resultMessage);
+        successfullyEnrichedMessages.add(resultMessage);
         return resultMessage;
     }
 }

@@ -4,5 +4,5 @@ import com.mts.teta.enricher.models.MessageDto;
 
 public interface EnrichmentService {
 
-    String enrich(MessageDto messageDto) throws InterruptedException;
+    String enrich(MessageDto messageDto);
 }
