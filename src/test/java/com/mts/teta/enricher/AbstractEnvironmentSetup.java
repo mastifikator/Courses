@@ -22,7 +22,7 @@ public abstract class AbstractEnvironmentSetup {
     protected MessageValidator validator;
     protected BlockingQueue<String> successfullyEnrichedMessages;
     protected BlockingQueue<String> unsuccessfullyEnrichedMessages;
-    protected EnrichmentService enrichmentService;
+    protected EnrichmentServiceImpl enrichmentServiceImpl;
     protected Logger LOG;
 
     @BeforeEach
@@ -41,7 +41,7 @@ public abstract class AbstractEnvironmentSetup {
         successfullyEnrichedMessages = new LinkedBlockingQueue<>();
         unsuccessfullyEnrichedMessages = new LinkedBlockingQueue<>();
 
-        enrichmentService = new EnrichmentService(validator,
+        enrichmentServiceImpl = new EnrichmentServiceImpl(validator,
                 db,
                 successfullyEnrichedMessages,
                 unsuccessfullyEnrichedMessages);

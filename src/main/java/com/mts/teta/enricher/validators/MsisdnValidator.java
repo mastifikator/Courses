@@ -18,7 +18,7 @@ public class MsisdnValidator implements MessageValidator {
     }
 
     @Override
-    public boolean validate(String message) {
+    public MessageContent validate(String message) {
 
         MessageContent messageContent;
 
@@ -27,15 +27,15 @@ public class MsisdnValidator implements MessageValidator {
             LOG.debug("success validating " + messageContent);
         } catch (JsonProcessingException | IllegalArgumentException j) {
             LOG.debug("validating error " + j.getMessage());
-            return false;
+            return null;
         }
 
         if (database.checkUser(messageContent.getMsisdn())) {
             LOG.debug("user for " + messageContent.getMsisdn() + " found");
-            return true;
+            return messageContent;
         } else {
             LOG.debug("user for " + messageContent.getMsisdn() + " not found");
-            return false;
+            return null;
         }
 
     }

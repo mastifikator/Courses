@@ -12,8 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MsisdnValidatorTest {
     private static final int USER_AMOUNT = 5;
@@ -43,21 +42,21 @@ class MsisdnValidatorTest {
     public void successfullyValidateTest() throws JsonProcessingException {
         MessageContent messageContent = new MessageContent("action", "bookCard", "1", new EnrichmentName("", ""));
 
-        assertTrue(validator.validate(objectMapper.writeValueAsString(messageContent)));
+        assertEquals(messageContent, validator.validate(objectMapper.writeValueAsString(messageContent)));
     }
 
     @Test
     public void jsonUnsuccessfullyValidateTest() {
         String wrongJson = "{'action':'action', 'page':'bookCard'}";
 
-        assertFalse(validator.validate(wrongJson));
+        assertNull(validator.validate(wrongJson));
     }
 
     @Test
     public void databaseUnsuccessfullyValidateTest() throws JsonProcessingException {
         MessageContent messageContent = new MessageContent("action", "bookCard", Integer.toString(USER_AMOUNT), new EnrichmentName("", ""));
 
-        assertFalse(validator.validate(objectMapper.writeValueAsString(messageContent)));
+        assertNull(validator.validate(objectMapper.writeValueAsString(messageContent)));
     }
 
 }
