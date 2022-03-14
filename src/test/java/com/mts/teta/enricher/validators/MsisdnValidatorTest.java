@@ -2,7 +2,7 @@ package com.mts.teta.enricher.validators;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mts.teta.enricher.database.InMemoryUserDatabase;
+import com.mts.teta.enricher.database.InMemoryUserDatabaseWithMsisdnPK;
 import com.mts.teta.enricher.database.UserDatabase;
 import com.mts.teta.enricher.models.EnrichmentName;
 import com.mts.teta.enricher.models.MessageContent;
@@ -25,7 +25,7 @@ class MsisdnValidatorTest {
 
     @BeforeEach
     public void prepareEnvironment() {
-        db = new InMemoryUserDatabase();
+        db = new InMemoryUserDatabaseWithMsisdnPK();
         objectMapper = new ObjectMapper();
         LOG = LoggerFactory.getLogger(MsisdnValidatorTest.class);
 

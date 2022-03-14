@@ -1,7 +1,7 @@
 package com.mts.teta.enricher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mts.teta.enricher.database.InMemoryUserDatabase;
+import com.mts.teta.enricher.database.InMemoryUserDatabaseWithMsisdnPK;
 import com.mts.teta.enricher.database.UserDatabase;
 import com.mts.teta.enricher.models.User;
 import com.mts.teta.enricher.validators.MessageValidator;
@@ -17,7 +17,6 @@ public abstract class AbstractEnvironmentSetup {
 
     protected UserDatabase db;
     protected ObjectMapper objectMapper;
-    protected MessageValidator validator;
     protected CopyOnWriteArrayList<String> successfullyEnrichedMessages;
     protected CopyOnWriteArrayList<String> unsuccessfullyEnrichedMessages;
     protected EnrichmentServiceImpl enrichmentServiceImpl;
@@ -25,7 +24,7 @@ public abstract class AbstractEnvironmentSetup {
 
     @BeforeEach
     public void prepareDatabase() {
-        db = new InMemoryUserDatabase();
+        db = new InMemoryUserDatabaseWithMsisdnPK();
         LOG = LoggerFactory.getLogger(AbstractEnvironmentSetup.class);
 
         for (int i = 0; i < USER_AMOUNT; i++) {
@@ -35,12 +34,10 @@ public abstract class AbstractEnvironmentSetup {
         }
 
         objectMapper = new ObjectMapper();
-        validator = new MsisdnValidator(db);
         successfullyEnrichedMessages = new CopyOnWriteArrayList<>();
         unsuccessfullyEnrichedMessages = new CopyOnWriteArrayList<>();
 
-        enrichmentServiceImpl = new EnrichmentServiceImpl(validator,
-                db,
+        enrichmentServiceImpl = new EnrichmentServiceImpl(db,
                 successfullyEnrichedMessages,
                 unsuccessfullyEnrichedMessages);
     }
