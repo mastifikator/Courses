@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 public class StatisticsCounter {
     private static final Logger LOG = LoggerFactory.getLogger(StatisticsCounter.class);
 
-    public void countHandlerCall() {
-        LOG.info("Кто-то совершил вызов");
+    public void countHandlerCall(String comment) {
+        LOG.info(comment);
     }
 
 }
