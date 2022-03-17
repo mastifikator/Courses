@@ -2,7 +2,7 @@ package com.mts.teta.enricher.validators;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mts.teta.enricher.database.InMemoryUserDatabase;
+import com.mts.teta.enricher.database.InMemoryUserDatabaseWithMsisdnPK;
 import com.mts.teta.enricher.database.UserDatabase;
 import com.mts.teta.enricher.models.EnrichmentName;
 import com.mts.teta.enricher.models.MessageContent;
@@ -12,8 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MsisdnValidatorTest {
     private static final int USER_AMOUNT = 5;
@@ -26,7 +25,7 @@ class MsisdnValidatorTest {
 
     @BeforeEach
     public void prepareEnvironment() {
-        db = new InMemoryUserDatabase();
+        db = new InMemoryUserDatabaseWithMsisdnPK();
         objectMapper = new ObjectMapper();
         LOG = LoggerFactory.getLogger(MsisdnValidatorTest.class);
 
@@ -43,21 +42,21 @@ class MsisdnValidatorTest {
     public void successfullyValidateTest() throws JsonProcessingException {
         MessageContent messageContent = new MessageContent("action", "bookCard", "1", new EnrichmentName("", ""));
 
-        assertTrue(validator.validate(objectMapper.writeValueAsString(messageContent)));
+        assertEquals(messageContent, validator.validate(objectMapper.writeValueAsString(messageContent)));
     }
 
     @Test
     public void jsonUnsuccessfullyValidateTest() {
         String wrongJson = "{'action':'action', 'page':'bookCard'}";
 
-        assertFalse(validator.validate(wrongJson));
+        assertNull(validator.validate(wrongJson));
     }
 
     @Test
     public void databaseUnsuccessfullyValidateTest() throws JsonProcessingException {
         MessageContent messageContent = new MessageContent("action", "bookCard", Integer.toString(USER_AMOUNT), new EnrichmentName("", ""));
 
-        assertFalse(validator.validate(objectMapper.writeValueAsString(messageContent)));
+        assertNull(validator.validate(objectMapper.writeValueAsString(messageContent)));
     }
 
 }

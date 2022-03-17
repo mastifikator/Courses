@@ -1,5 +1,7 @@
 package com.mts.teta.enricher.validators;
 
+import com.mts.teta.enricher.models.MessageContent;
+
 public interface MessageValidator {
-    boolean validate(String messageContent);
+    MessageContent validate(String messageContent);
 }

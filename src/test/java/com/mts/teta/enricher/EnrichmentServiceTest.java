@@ -29,7 +29,7 @@ public class EnrichmentServiceTest extends AbstractEnvironmentSetup {
                     MessageContent messageContent = new MessageContent("action", "bookCard", msisdn, new EnrichmentName("", ""));
                     MessageDto messageDto = new MessageDto(objectMapper.writeValueAsString(messageContent), EnrichmentType.MSISDN);
 
-                    String enrichedMessage = enrichmentService.enrich(messageDto);
+                    String enrichedMessage = enrichmentServiceImpl.enrich(messageDto);
 
                     MessageContent resultMessage = objectMapper.readValue(enrichedMessage, MessageContent.class);
                     EnrichmentName resultEnrichment = new EnrichmentName(msisdn, msisdn + msisdn + msisdn);
@@ -38,8 +38,6 @@ public class EnrichmentServiceTest extends AbstractEnvironmentSetup {
                     assertEquals(resultMessage.getAction(), messageContent.getAction());
                     assertEquals(resultMessage.getEnrichment(), resultEnrichment);
 
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
                 } catch (JsonProcessingException j) {
                     LOG.debug("serialize error" + j.getMessage());
                 }
@@ -64,7 +62,7 @@ public class EnrichmentServiceTest extends AbstractEnvironmentSetup {
                     MessageContent messageContent = new MessageContent("anotherAction", "anotherBookCard", msisdn, new EnrichmentName("", ""));
                     MessageDto messageDto = new MessageDto(objectMapper.writeValueAsString(messageContent), EnrichmentType.MSISDN);
 
-                    String enrichedMessage = enrichmentService.enrich(messageDto);
+                    String enrichedMessage = enrichmentServiceImpl.enrich(messageDto);
 
                     MessageContent resultMessage = objectMapper.readValue(enrichedMessage, MessageContent.class);
                     EnrichmentName resultEnrichment = new EnrichmentName("", "");
@@ -73,8 +71,6 @@ public class EnrichmentServiceTest extends AbstractEnvironmentSetup {
                     assertEquals(resultMessage.getAction(), messageContent.getAction());
                     assertEquals(resultMessage.getEnrichment(), resultEnrichment);
 
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
                 } catch (JsonProcessingException j) {
                     LOG.debug("serialize error" + j.getMessage());
                 }

@@ -7,13 +7,13 @@ import com.mts.teta.enricher.models.MessageContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MsisdnValidator implements MessageValidator {
+public class ActionValidator implements MessageValidator {
 
     private final UserDatabase database;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final Logger LOG = LoggerFactory.getLogger(MsisdnValidator.class);
+    private final Logger LOG = LoggerFactory.getLogger(ActionValidator.class);
 
-    public MsisdnValidator(UserDatabase database) {
+    public ActionValidator(UserDatabase database) {
         this.database = database;
     }
 

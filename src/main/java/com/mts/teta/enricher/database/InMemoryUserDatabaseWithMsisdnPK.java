@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public class InMemoryUserDatabase implements UserDatabase {
+public class InMemoryUserDatabaseWithMsisdnPK implements UserDatabase {
 
-    private final Logger LOG = LoggerFactory.getLogger(InMemoryUserDatabase.class);
+    private final Logger LOG = LoggerFactory.getLogger(InMemoryUserDatabaseWithMsisdnPK.class);
     private final ConcurrentHashMap<String, User> userDb = new ConcurrentHashMap<>();
 
     @Override
