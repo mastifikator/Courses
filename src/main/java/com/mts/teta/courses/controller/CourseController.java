@@ -33,10 +33,10 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public void updateCourse(@PathVariable Long id,
-                             @Valid @RequestBody CourseRequestToUpdate request) {
+    public Course updateCourse(@PathVariable Long id,
+                               @Valid @RequestBody CourseRequestToUpdate request) {
         statisticsCounter.countHandlerCall("updateCourse " + id + " " + request);
-        courseLister.updateCourse(id, request);
+        return courseLister.updateCourse(id, request);
     }
 
     @PostMapping

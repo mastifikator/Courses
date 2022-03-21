@@ -4,7 +4,7 @@ import java.time.OffsetDateTime;
 
 public class ApiError {
     private String message;
-    OffsetDateTime dateOccurred;
+    private final OffsetDateTime dateOccurred;
 
     public ApiError() {
         this.dateOccurred = OffsetDateTime.now();

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class CourseLister {
@@ -27,11 +26,12 @@ public class CourseLister {
         return repository.findByTitleWithPrefix(titlePrefix);
     }
 
-    public void updateCourse(Long id, CourseRequestToUpdate request) {
+    public Course updateCourse(Long id, CourseRequestToUpdate request) {
         Course course = repository.findById(id).orElseThrow();
         course.setAuthor(request.getAuthor());
         course.setTitle(request.getTitle());
         repository.save(course);
+        return course;
     }
 
     public Course createCourse(CourseRequestToCreate request) {
