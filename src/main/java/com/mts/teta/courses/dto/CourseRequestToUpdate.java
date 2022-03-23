@@ -1,11 +1,14 @@
 package com.mts.teta.courses.dto;
 
+import com.mts.teta.courses.handler.annotation.TitleCase;
+import com.mts.teta.courses.handler.annotation.TitleCaseValue;
+
 import javax.validation.constraints.NotBlank;
 
 public class CourseRequestToUpdate {
     @NotBlank(message = "Course author has to be filled")
     private String author;
-    @NotBlank(message = "Course title has to be filled")
+    @TitleCase(titleCaseValue = TitleCaseValue.ANY)
     private String title;
 
     public String getAuthor() {
