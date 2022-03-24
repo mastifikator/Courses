@@ -1,48 +1,56 @@
 package com.mts.teta.courses.handler;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HandleTitleCaseValidateTest {
 
-    @Test
-    void falseCommonValidate() {
-        assertFalse(HandleTitleCaseValidate.commonValidate("Forbidden Character \\n"));
-        assertFalse(HandleTitleCaseValidate.commonValidate("Too Many     Whitespaces"));
-        assertFalse(HandleTitleCaseValidate.commonValidate(" Whitespaces On begin"));
-        assertFalse(HandleTitleCaseValidate.commonValidate("Whitespaces On Last "));
-        assertFalse(HandleTitleCaseValidate.commonValidate("Русские words"));
-        assertFalse(HandleTitleCaseValidate.commonValidate("EnglishСлова"));
+    @ParameterizedTest
+    @ValueSource(strings = {"Forbidden Character \\n",
+            "Too Many     Whitespaces",
+            " Whitespaces On begin",
+            "Whitespaces On Last ",
+            "Русские words",
+            "EnglishСлова"})
+    void falseCommonValidate(String input) {
+        assertFalse(HandleTitleCaseValidate.commonValidate(input));
     }
 
-    @Test
-    void successCommonValidate() {
-        assertTrue(HandleTitleCaseValidate.commonValidate("Это правильный русский заголовок"));
-        assertTrue(HandleTitleCaseValidate.commonValidate("It a Right English Title"));
-        assertTrue(HandleTitleCaseValidate.commonValidate("It Right English Title"));
+    @ParameterizedTest
+    @ValueSource(strings = {"Это правильный русский заголовок",
+            "It a Right English Title",
+            "It Right English Title"})
+    void successCommonValidate(String input) {
+        assertTrue(HandleTitleCaseValidate.commonValidate(input));
     }
 
-    @Test
-    void falseEnValidate() {
-        assertFalse(HandleTitleCaseValidate.enValidate("first word small"));
-        assertFalse(HandleTitleCaseValidate.enValidate("Last word small"));
-        assertFalse(HandleTitleCaseValidate.enValidate("first and last word small"));
-        assertFalse(HandleTitleCaseValidate.enValidate("Middle A word Small"));
+    @ParameterizedTest
+    @ValueSource(strings = {"first word small",
+            "Last word small",
+            "first and last word small",
+            "Middle A word Small"})
+    void falseEnValidate(String input) {
+        assertFalse(HandleTitleCaseValidate.enValidate(input));
     }
 
-    @Test
-    void successEnValidate() {
-        assertTrue(HandleTitleCaseValidate.enValidate("All Word not Small"));
-        assertTrue(HandleTitleCaseValidate.enValidate("All Word a Big"));
-        assertTrue(HandleTitleCaseValidate.enValidate("All Word the Big"));
+    @ParameterizedTest
+    @ValueSource(strings = {"All Word not Small",
+            "All Word a Big",
+            "All Word the Big"})
+    void successEnValidate(String input) {
+        assertTrue(HandleTitleCaseValidate.enValidate(input));
     }
 
-    @Test
-    void falseRuValidate() {
-        assertFalse(HandleTitleCaseValidate.ruValidate("первое слово с маленькой"));
-        assertFalse(HandleTitleCaseValidate.ruValidate("Первое Слово с Большой И Остальные С Большой"));
-        assertFalse(HandleTitleCaseValidate.ruValidate("пеРвое слОво с малеНькой, в сЕрЕдине"));
+    @ParameterizedTest
+    @ValueSource(strings = {"первое слово с маленькой",
+            "Первое Слово с Большой И Остальные С Большой",
+            "пеРвое слОво с малеНькой, в сЕрЕдине"})
+    void falseRuValidate(String input) {
+        assertFalse(HandleTitleCaseValidate.ruValidate(input));
     }
 
     @Test
@@ -50,117 +58,133 @@ class HandleTitleCaseValidateTest {
         assertTrue(HandleTitleCaseValidate.ruValidate("Первое слово с большой, остальные с маленькой"));
     }
 
-    @Test
-    void falseCheckOnForbiddenCharacters() {
-        assertFalse(HandleTitleCaseValidate.checkOnForbiddenCharacters("Это \\r"));
-        assertFalse(HandleTitleCaseValidate.checkOnForbiddenCharacters("Это \\t"));
-        assertFalse(HandleTitleCaseValidate.checkOnForbiddenCharacters("Это \\n"));
+    @ParameterizedTest
+    @ValueSource(strings = {"Это \\r",
+            "Это \\t",
+            "Это \\n"})
+    void falseCheckOnForbiddenCharacters(String input) {
+        assertFalse(HandleTitleCaseValidate.checkOnForbiddenCharacters(input));
     }
 
-    @Test
-    void trueCheckOnForbiddenCharacters() {
-        assertTrue(HandleTitleCaseValidate.checkOnForbiddenCharacters("Здесь нет r"));
-        assertTrue(HandleTitleCaseValidate.checkOnForbiddenCharacters("Здесь нет t"));
-        assertTrue(HandleTitleCaseValidate.checkOnForbiddenCharacters("Здесь нет n"));
+    @ParameterizedTest
+    @ValueSource(strings = {"Здесь нет r",
+            "Здесь нет t",
+            "Здесь нет n"})
+    void trueCheckOnForbiddenCharacters(String input) {
+        assertTrue(HandleTitleCaseValidate.checkOnForbiddenCharacters(input));
     }
 
-    @Test
-    void falseCheckOnNumberOfSpaces() {
-        assertFalse(HandleTitleCaseValidate.checkOnNumberOfSpaces("Это  чудесный день"));
-        assertFalse(HandleTitleCaseValidate.checkOnNumberOfSpaces("Это  чудесный   день"));
-        assertFalse(HandleTitleCaseValidate.checkOnNumberOfSpaces("Это чудесный   день"));
-        assertFalse(HandleTitleCaseValidate.checkOnNumberOfSpaces("Hello     validation!"));
+    @ParameterizedTest
+    @ValueSource(strings = {"Это  чудесный день",
+            "Это  чудесный   день",
+            "Это чудесный   день",
+            "Hello     validation!"})
+    void falseCheckOnNumberOfSpaces(String input) {
+        assertFalse(HandleTitleCaseValidate.checkOnNumberOfSpaces(input));
     }
 
-    @Test
-    void successCheckOnNumberOfSpaces() {
-        assertTrue(HandleTitleCaseValidate.checkOnNumberOfSpaces("Это чудесный день!"));
-        assertTrue(HandleTitleCaseValidate.checkOnNumberOfSpaces("Привет валидация!"));
-        assertTrue(HandleTitleCaseValidate.checkOnNumberOfSpaces("Привет!"));
+    @ParameterizedTest
+    @ValueSource(strings = {"Это чудесный день!",
+            "Привет валидация!",
+            "Привет!"})
+    void successCheckOnNumberOfSpaces(String input) {
+        assertTrue(HandleTitleCaseValidate.checkOnNumberOfSpaces(input));
     }
 
-    @Test
-    void falseCheckOnEnglishAlphabet() {
-        assertFalse(HandleTitleCaseValidate.checkOnEnglishAlphabet("Привет валидация!"));
-        assertFalse(HandleTitleCaseValidate.checkOnEnglishAlphabet("Hello валидация:"));
-        assertFalse(HandleTitleCaseValidate.checkOnEnglishAlphabet("Helloпривет validation"));
-        assertFalse(HandleTitleCaseValidate.checkOnEnglishAlphabet("This is a wonderful день"));
+    @ParameterizedTest
+    @ValueSource(strings = {"Привет валидация!",
+            "Hello валидация:",
+            "Helloпривет validation",
+            "This is a wonderful день"})
+    void falseCheckOnEnglishAlphabet(String input) {
+        assertFalse(HandleTitleCaseValidate.checkOnEnglishAlphabet(input));
     }
 
-    @Test
-    void successCheckOnEnglishAlphabet() {
-        assertTrue(HandleTitleCaseValidate.checkOnEnglishAlphabet("Hello validation!"));
-        assertTrue(HandleTitleCaseValidate.checkOnEnglishAlphabet("Hello validation, how are you?"));
-        assertTrue(HandleTitleCaseValidate.checkOnEnglishAlphabet("Hello validation, 'how are you': "));
-        assertTrue(HandleTitleCaseValidate.checkOnEnglishAlphabet("This is a wonderful day... \""));
+    @ParameterizedTest
+    @ValueSource(strings = {"Hello validation!",
+            "Hello validation, how are you?",
+            "Hello validation, 'how are you': ",
+            "This is a wonderful day... \""})
+    void successCheckOnEnglishAlphabet(String input) {
+        assertTrue(HandleTitleCaseValidate.checkOnEnglishAlphabet(input));
     }
 
-    @Test
-    void falseCheckOnRussianAlphabet() {
-        assertFalse(HandleTitleCaseValidate.checkOnRussianAlphabet("Hello validation!"));
-        assertFalse(HandleTitleCaseValidate.checkOnRussianAlphabet("Hello валидация:"));
-        assertFalse(HandleTitleCaseValidate.checkOnRussianAlphabet("Helloпривет validation"));
-        assertFalse(HandleTitleCaseValidate.checkOnRussianAlphabet("This is a wonderful день"));
+    @ParameterizedTest
+    @ValueSource(strings = {"Hello validation!",
+            "Hello валидация:",
+            "Helloпривет validation",
+            "This is a wonderful день"})
+    void falseCheckOnRussianAlphabet(String input) {
+        assertFalse(HandleTitleCaseValidate.checkOnRussianAlphabet(input));
     }
 
-    @Test
-    void successCheckOnRussianAlphabet() {
-        assertTrue(HandleTitleCaseValidate.checkOnRussianAlphabet("Привет валидация!"));
-        assertTrue(HandleTitleCaseValidate.checkOnRussianAlphabet("Привет валидация, как дела?"));
-        assertTrue(HandleTitleCaseValidate.checkOnRussianAlphabet("Привет валидация, 'как дела'"));
-        assertTrue(HandleTitleCaseValidate.checkOnRussianAlphabet("Привет: как дела  \""));
+    @ParameterizedTest
+    @ValueSource(strings = {"Привет валидация!",
+            "Привет валидация, как дела?",
+            "Привет валидация, 'как дела'",
+            "Привет: как дела  \""})
+    void successCheckOnRussianAlphabet(String input) {
+        assertTrue(HandleTitleCaseValidate.checkOnRussianAlphabet(input));
     }
 
-    @Test
-    void falseCheckOnUpperFirst() {
-        assertFalse(HandleTitleCaseValidate.checkOnUpperFirst("hello validation"));
-        assertFalse(HandleTitleCaseValidate.checkOnUpperFirst("hello Validation"));
+    @ParameterizedTest
+    @ValueSource(strings = {"hello validation",
+            "hello Validation"})
+    void falseCheckOnUpperFirst(String input) {
+        assertFalse(HandleTitleCaseValidate.checkOnUpperFirst(input));
     }
 
-    @Test
-    void successCheckOnUpperFirst() {
-        assertTrue(HandleTitleCaseValidate.checkOnUpperFirst("Hello validation"));
-        assertTrue(HandleTitleCaseValidate.checkOnUpperFirst("Hello Validation"));
+    @ParameterizedTest
+    @ValueSource(strings = {"Hello validation",
+            "Hello Validation"})
+    void successCheckOnUpperFirst(String input) {
+        assertTrue(HandleTitleCaseValidate.checkOnUpperFirst(input));
     }
 
-    @Test
-    void falseCheckOnLowerNotTheFirst() {
-        assertFalse(HandleTitleCaseValidate.checkOnLowerNotTheFirst("Hello Validation"));
-        assertFalse(HandleTitleCaseValidate.checkOnLowerNotTheFirst("hello Validation"));
-        assertFalse(HandleTitleCaseValidate.checkOnLowerNotTheFirst("hello Not Validation"));
+    @ParameterizedTest
+    @ValueSource(strings = {"Hello Validation",
+            "hello Validation",
+            "hello Not Validation"})
+    void falseCheckOnLowerNotTheFirst(String input) {
+        assertFalse(HandleTitleCaseValidate.checkOnLowerNotTheFirst(input));
     }
 
-    @Test
-    void successCheckOnLowerNotTheFirst() {
-        assertTrue(HandleTitleCaseValidate.checkOnLowerNotTheFirst("Hello validation"));
-        assertTrue(HandleTitleCaseValidate.checkOnLowerNotTheFirst("hello validation"));
-        assertTrue(HandleTitleCaseValidate.checkOnLowerNotTheFirst("hello not validation"));
+    @ParameterizedTest
+    @ValueSource(strings = {"Hello validation",
+            "hello validation",
+            "hello not validation"})
+    void successCheckOnLowerNotTheFirst(String input) {
+        assertTrue(HandleTitleCaseValidate.checkOnLowerNotTheFirst(input));
     }
 
-    @Test
-    void falseCheckOnUpperLast() {
-        assertFalse(HandleTitleCaseValidate.checkOnUpperLast("hello validation"));
-        assertFalse(HandleTitleCaseValidate.checkOnUpperLast("Hello Validation on"));
+    @ParameterizedTest
+    @ValueSource(strings = {"hello validation",
+            "Hello Validation on"})
+    void falseCheckOnUpperLast(String input) {
+        assertFalse(HandleTitleCaseValidate.checkOnUpperLast(input));
     }
 
 
-    @Test
-    void successCheckOnUpperLast() {
-        assertTrue(HandleTitleCaseValidate.checkOnUpperLast("hello Validation"));
-        assertTrue(HandleTitleCaseValidate.checkOnUpperLast("hello Validation On"));
+    @ParameterizedTest
+    @ValueSource(strings = {"hello Validation",
+            "hello Validation On"})
+    void successCheckOnUpperLast(String input) {
+        assertTrue(HandleTitleCaseValidate.checkOnUpperLast(input));
     }
 
-    @Test
-    void falseCheckOnUpperAllExcludePretext() {
-        assertFalse(HandleTitleCaseValidate.checkOnUpperAllExcludePretext("Hello a validation"));
-        assertFalse(HandleTitleCaseValidate.checkOnUpperAllExcludePretext("hello or Validation"));
-        assertFalse(HandleTitleCaseValidate.checkOnUpperAllExcludePretext("Hello note Validation"));
+    @ParameterizedTest
+    @ValueSource(strings = {"Hello a validation",
+            "hello or Validation",
+            "Hello note Validation"})
+    void falseCheckOnUpperAllExcludePretext(String input) {
+        assertFalse(HandleTitleCaseValidate.checkOnUpperAllExcludePretext(input));
     }
 
-    @Test
-    void successCheckOnUpperAllExcludePretext() {
-        assertTrue(HandleTitleCaseValidate.checkOnUpperAllExcludePretext("Hello Or Validation"));
-        assertTrue(HandleTitleCaseValidate.checkOnUpperAllExcludePretext("Hello or Validation"));
-        assertTrue(HandleTitleCaseValidate.checkOnUpperAllExcludePretext("Hello the Validation"));
+    @ParameterizedTest
+    @ValueSource(strings = {"Hello Or Validation",
+            "Hello or Validation",
+            "Hello the Validation"})
+    void successCheckOnUpperAllExcludePretext(String input) {
+        assertTrue(HandleTitleCaseValidate.checkOnUpperAllExcludePretext(input));
     }
 }
