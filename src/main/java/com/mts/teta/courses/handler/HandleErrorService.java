@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,14 @@ public class HandleErrorService {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ApiError> noSuchElementExceptionHandler(NoSuchElementException ex) {
+        return new ResponseEntity<>(
+                new ApiError(ex.getMessage()),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ApiError> entityNotFoundExceptionHandler(EntityNotFoundException ex) {
         return new ResponseEntity<>(
                 new ApiError(ex.getMessage()),
                 HttpStatus.NOT_FOUND

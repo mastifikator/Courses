@@ -23,11 +23,11 @@ public class CourseLister {
     }
 
     public List<Course> coursesByTitlePrefix(String titlePrefix) {
-        return repository.findByTitleWithPrefix(titlePrefix);
+        return repository.findByTitleLike(titlePrefix + "%");
     }
 
     public Course updateCourse(Long id, CourseRequestToUpdate request) {
-        Course course = repository.findById(id).orElseThrow();
+        Course course = repository.getById(id);
         course.setAuthor(request.getAuthor());
         course.setTitle(request.getTitle());
         repository.save(course);
@@ -41,6 +41,10 @@ public class CourseLister {
     }
 
     public void deleteCourse(Long id) {
-        repository.delete(id);
+        repository.deleteById(id);
+    }
+
+    public Course saveCourse(Course course) {
+        return repository.save(course);
     }
 }
