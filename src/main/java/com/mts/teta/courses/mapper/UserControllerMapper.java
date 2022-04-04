@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserControllerMapper {
     public UserResponse mapUserToUserResponse(User user, String actionResponse) {
-        return new UserResponse(user.getUser_id(),
+        return new UserResponse(user.getUserId(),
                 user.getUsername(),
                 actionResponse);
     }

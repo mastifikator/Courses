@@ -11,7 +11,8 @@ public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long course_id;
+    @Column(name = "course_id")
+    private Long courseId;
 
     @Column
     private String author;
@@ -33,18 +34,18 @@ public class Course {
     public Course() {
     }
 
-    public Course(Long course_id, String author, String title) {
-        this.course_id = course_id;
+    public Course(Long courseId, String author, String title) {
+        this.courseId = courseId;
         this.author = author;
         this.title = title;
     }
 
-    public Long getCourse_id() {
-        return course_id;
+    public Long getCourseId() {
+        return courseId;
     }
 
-    public void setCourse_id(Long id) {
-        this.course_id = id;
+    public void setCourseId(Long id) {
+        this.courseId = id;
     }
 
     public String getAuthor() {
@@ -84,11 +85,11 @@ public class Course {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return Objects.equals(course_id, course.course_id) && Objects.equals(author, course.author) && Objects.equals(title, course.title);
+        return Objects.equals(courseId, course.courseId) && Objects.equals(author, course.author) && Objects.equals(title, course.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(course_id, author, title);
+        return Objects.hash(courseId, author, title);
     }
 }

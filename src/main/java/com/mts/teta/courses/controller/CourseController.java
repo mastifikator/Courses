@@ -5,8 +5,11 @@ import com.mts.teta.courses.domain.User;
 import com.mts.teta.courses.dto.CourseRequestToCreate;
 import com.mts.teta.courses.dto.CourseRequestToUpdate;
 import com.mts.teta.courses.dto.CourseResponse;
+import com.mts.teta.courses.dto.LessonResponse;
 import com.mts.teta.courses.mapper.CourseControllerMapper;
+import com.mts.teta.courses.mapper.LessonControllerMapper;
 import com.mts.teta.courses.service.CourseLister;
+import com.mts.teta.courses.service.LessonLister;
 import com.mts.teta.courses.service.StatisticsCounter;
 import com.mts.teta.courses.service.UserLister;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,23 +29,26 @@ public class CourseController {
     private final static String DELETE_ANSWER = "Course Deleted";
     private final static String ASSIGN_ANSWER = "User Assign to course";
     private final static String UNASSIGNED_ANSWER = "User unassigned from course";
+    private final static String USERS_FOUND_ANSWER = "Users found";
 
     @Autowired
     private CourseLister courseLister;
     @Autowired
-    private UserLister userLister;
+    private LessonLister lessonLister;
     @Autowired
     private StatisticsCounter statisticsCounter;
     @Autowired
     private CourseControllerMapper courseControllerMapper;
+    @Autowired
+    private LessonControllerMapper lessonControllerMapper;
 
-    @GetMapping("/{id}")
-    public CourseResponse getCourse(@PathVariable("id") Long id) {
-        statisticsCounter.countHandlerCall("getCourse " + id);
-        return courseControllerMapper.mapCourseToCourseResponse(courseLister.courseById(id), GET_ANSWER);
+    @GetMapping("/{courseId}")
+    public CourseResponse getCourse(@PathVariable("courseId") Long courseId) {
+        statisticsCounter.countHandlerCall("getCourse " + courseId);
+        return courseControllerMapper.mapCourseToCourseResponse(courseLister.courseById(courseId), GET_ANSWER);
     }
 
-    @GetMapping("/filtered")
+    @GetMapping("/filteredUsers")
     public List<CourseResponse> getCoursesByTitlePrefix(@RequestParam(value = "titlePrefix", required = false) String titlePrefix) {
         statisticsCounter.countHandlerCall(FILTER_ANSWER + titlePrefix);
 
@@ -62,44 +68,54 @@ public class CourseController {
                         .createCourse(request), CREATE_ANSWER);
     }
 
-    @PutMapping("/{id}")
-    public CourseResponse updateCourse(@PathVariable Long id,
+    @PutMapping("/{courseId}")
+    public CourseResponse updateCourse(@PathVariable Long courseId,
                                        @Valid @RequestBody CourseRequestToUpdate request) {
-        statisticsCounter.countHandlerCall(UPDATE_ANSWER + id + " " + request);
+        statisticsCounter.countHandlerCall(UPDATE_ANSWER + courseId + " " + request);
 
         return courseControllerMapper
                 .mapCourseToCourseResponse(courseLister
-                        .updateCourse(id, request), UPDATE_ANSWER);
+                        .updateCourse(courseId, request), UPDATE_ANSWER);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteCourse(@PathVariable Long id) {
-        statisticsCounter.countHandlerCall(DELETE_ANSWER + id);
-        courseLister.deleteCourse(id);
+    @DeleteMapping("/{courseId}")
+    public void deleteCourse(@PathVariable Long courseId) {
+        statisticsCounter.countHandlerCall(DELETE_ANSWER + courseId);
+        courseLister.deleteCourse(courseId);
     }
 
-    @PostMapping("/{courseId}/assign")
-    public CourseResponse assignUser(@PathVariable("courseId") Long courseId,
-                                     @RequestParam("userId") Long userId) {
-        User user = userLister.userById(userId);
-        Course course = courseLister.courseById(courseId);
-
-        course.getUsers().add(user);
-        user.getCourses().add(course);
-
-        return courseControllerMapper.mapCourseToCourseResponse(courseLister.saveCourse(course), ASSIGN_ANSWER);
+    @GetMapping("/{courseId}/users")
+    public void getUsersFromCourse(@PathVariable Long courseId) {
+        statisticsCounter.countHandlerCall(USERS_FOUND_ANSWER + courseId);
+        courseLister.getUsersFromCourse(courseId);
     }
 
-    @PostMapping("/{courseId}/unassigned")
-    public CourseResponse unassignedUser(@PathVariable("courseId") Long courseId,
-                                         @RequestParam("userId") Long userId) {
-        User user = userLister.userById(userId);
-        Course course = courseLister.courseById(courseId);
+    @PutMapping("/{courseId}/users/{userId}")
+    public CourseResponse assignUserToCourse(@PathVariable("courseId") Long courseId,
+                                             @PathVariable("userId") Long userId) {
 
-        course.getUsers().remove(user);
-        user.getCourses().remove(course);
+        return courseControllerMapper
+                .mapCourseToCourseResponse(courseLister
+                        .assignedUserToCourse(courseId, userId), ASSIGN_ANSWER);
+    }
 
-        return courseControllerMapper.mapCourseToCourseResponse(courseLister.saveCourse(course), UNASSIGNED_ANSWER);
+    @DeleteMapping("/{courseId}/users/{userId}")
+    public CourseResponse unassignedUserFromCourse(@PathVariable("courseId") Long courseId,
+                                                   @PathVariable("userId") Long userId) {
+
+        return courseControllerMapper
+                .mapCourseToCourseResponse(courseLister
+                        .unassignedUserToCourse(courseId, userId), UNASSIGNED_ANSWER);
+    }
+
+    @GetMapping("/{courseId}/lessons")
+    public List<LessonResponse> getLessonsForCourse(@PathVariable("courseId") Long courseId) {
+        statisticsCounter.countHandlerCall("getLessons for course " + courseId);
+
+        return lessonLister.lessonsByCourseId(courseId)
+                .stream()
+                .map(l -> lessonControllerMapper.mapLessonToLessonResponse(l, GET_ANSWER))
+                .collect(Collectors.toList());
     }
 
 }

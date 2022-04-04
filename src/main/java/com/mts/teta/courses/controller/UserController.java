@@ -26,10 +26,10 @@ public class UserController {
     @Autowired
     private UserControllerMapper userControllerMapper;
 
-    @GetMapping("/{id}")
-    public UserResponse getUser(@PathVariable("id") Long id) {
-        statisticsCounter.countHandlerCall("getUser " + id);
-        return userControllerMapper.mapUserToUserResponse(userLister.userById(id), GET_ANSWER);
+    @GetMapping("/{userId}")
+    public UserResponse getUser(@PathVariable("userId") Long userId) {
+        statisticsCounter.countHandlerCall("getUser " + userId);
+        return userControllerMapper.mapUserToUserResponse(userLister.userById(userId), GET_ANSWER);
     }
 
     @PostMapping
@@ -41,19 +41,19 @@ public class UserController {
                         .createUser(request), CREATE_ANSWER);
     }
 
-    @PutMapping("/{id}")
-    public UserResponse updateUser(@PathVariable Long id,
+    @PutMapping("/{userId}")
+    public UserResponse updateUser(@PathVariable Long userId,
                                    @Valid @RequestBody UserRequestToUpdate request) {
-        statisticsCounter.countHandlerCall(UPDATE_ANSWER + id + " " + request);
+        statisticsCounter.countHandlerCall(UPDATE_ANSWER + userId + " " + request);
 
         return userControllerMapper
                 .mapUserToUserResponse(userLister
-                        .updateUser(id, request), UPDATE_ANSWER);
+                        .updateUser(userId, request), UPDATE_ANSWER);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        statisticsCounter.countHandlerCall(DELETE_ANSWER + id);
-        userLister.deleteUser(id);
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable Long userId) {
+        statisticsCounter.countHandlerCall(DELETE_ANSWER + userId);
+        userLister.deleteUser(userId);
     }
 }

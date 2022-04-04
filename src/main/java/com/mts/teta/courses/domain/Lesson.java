@@ -8,7 +8,8 @@ public class Lesson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long lesson_id;
+    @Column(name = "lesson_id")
+    private Long lessonId;
 
     @Column
     private String title;
@@ -30,12 +31,12 @@ public class Lesson {
         this.course = course;
     }
 
-    public Long getLesson_id() {
-        return lesson_id;
+    public Long getLessonId() {
+        return lessonId;
     }
 
-    public void setLesson_id(Long id) {
-        this.lesson_id = id;
+    public void setLessonId(Long id) {
+        this.lessonId = id;
     }
 
     public String getTitle() {

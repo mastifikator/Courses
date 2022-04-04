@@ -26,23 +26,23 @@ public class LessonLister {
         return lesson;
     }
 
-    public Lesson updateLesson(Long id, LessonRequestToUpdate request) {
-        Lesson lesson = lessonRepository.getById(id);
+    public Lesson updateLesson(Long lessonId, LessonRequestToUpdate request) {
+        Lesson lesson = lessonRepository.getById(lessonId);
         lesson.setTitle(request.getTitle());
         lesson.setText(request.getText());
         lessonRepository.save(lesson);
         return lesson;
     }
 
-    public Lesson lessonById(Long id) {
-        return lessonRepository.getById(id);
+    public Lesson lessonById(Long lessonId) {
+        return lessonRepository.getById(lessonId);
     }
 
-    public void deleteLesson(Long id) {
-        lessonRepository.deleteById(id);
+    public void deleteLesson(Long lessonId) {
+        lessonRepository.deleteById(lessonId);
     }
 
-    public List<Lesson> lessonsByCourseId(Long id) {
-        return lessonRepository.findAllLessonsForCourse(id);
+    public List<Lesson> lessonsByCourseId(Long courseId) {
+        return lessonRepository.findAllLessonsForCourse(courseId);
     }
 }

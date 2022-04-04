@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 public class LessonControllerMapper {
 
     public LessonResponse mapLessonToLessonResponse(Lesson lesson, String actionResponse) {
-        return new LessonResponse(lesson.getLesson_id(),
+        return new LessonResponse(lesson.getLessonId(),
                 lesson.getTitle(),
                 lesson.getText(),
-                lesson.getCourse().getCourse_id(),
+                lesson.getCourse().getCourseId(),
                 actionResponse);
     }
 }
