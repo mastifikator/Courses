@@ -7,14 +7,14 @@ public class CourseResponse {
     private String author;
     private String title;
     private String actionDescription;
-    private Set<UserResponse> assigned_users;
+    private Set<UserResponse> assignedUsers;
 
-    public CourseResponse(Long id, String author, String title, String actionDescription, Set<UserResponse> assigned_users) {
+    public CourseResponse(Long id, String author, String title, String actionDescription, Set<UserResponse> assignedUsers) {
         this.id = id;
         this.author = author;
         this.title = title;
         this.actionDescription = actionDescription;
-        this.assigned_users = assigned_users;
+        this.assignedUsers = assignedUsers;
     }
 
     public Long getId() {
@@ -49,11 +49,11 @@ public class CourseResponse {
         this.actionDescription = actionDescription;
     }
 
-    public Set<UserResponse> getAssigned_users() {
-        return assigned_users;
+    public Set<UserResponse> getAssignedUsers() {
+        return assignedUsers;
     }
 
-    public void setAssigned_users(Set<UserResponse> assigned_users) {
-        this.assigned_users = assigned_users;
+    public void setAssignedUsers(Set<UserResponse> assignedUsers) {
+        this.assignedUsers = assignedUsers;
     }
 }
