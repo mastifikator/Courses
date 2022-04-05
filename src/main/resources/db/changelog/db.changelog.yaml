@@ -1,0 +1,89 @@
+databaseChangeLog:
+  - changeSet:
+      id: '2022033101'
+      author: 'Nikolay Vasilev'
+      changes:
+        - createTable:
+            tableName: 'courses'
+            columns:
+              - column:
+                  name: course_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_course
+              - column:
+                  name: author
+                  type: varchar(255)
+              - column:
+                  name: title
+                  type: varchar(255)
+  - changeSet:
+      id: '2022033102'
+      author: 'Nikolay Vasilev'
+      changes:
+        - createTable:
+            tableName: 'lessons'
+            columns:
+              - column:
+                  name: lesson_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_lesson
+              - column:
+                  name: title
+                  type: varchar(255)
+              - column:
+                  name: text
+                  type: longtext
+              - column:
+                  name: course_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_lesson_course
+                    references: courses(course_id)
+  - changeSet:
+      id: '2022010401'
+      author: 'Nikolay Vasilev'
+      changes:
+        - createTable:
+            tableName: 'users'
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_users
+              - column:
+                  name: username
+                  type: varchar(255)
+  - changeSet:
+      id: '2022010402'
+      author: 'Nikolay Vasilev'
+      changes:
+        - createTable:
+            tableName: 'courses_users'
+            columns:
+              - column:
+                  name: course_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_courses
+                    references: courses(course_id)
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_users
+                    references: users(user_id)

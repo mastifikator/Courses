@@ -1,12 +1,11 @@
 package com.mts.teta.courses.dao;
 
-import com.mts.teta.courses.domain.Course;
+import com.mts.teta.courses.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface CourseRepository extends JpaRepository<Course, Long> {
-    List<Course> findByTitleLike(String prefix);
+public interface UserRepository extends JpaRepository<User, Long> {
 }
