@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: '2022033101'
+      id: '2022040401'
       author: 'Nikolay Vasilev'
       changes:
         - createTable:
@@ -20,8 +20,72 @@ databaseChangeLog:
               - column:
                   name: title
                   type: varchar(255)
+              - column:
+                  name: description
+                  type: longtext
+              - column:
+                  name: date_created
+                  type: timestamp
+              - column:
+                  name: change_author
+                  type: varchar(255)
+              - column:
+                  name: date_changed
+                  type: timestamp
+              - column:
+                  name: rating
+                  type: tinyint
+              - column:
+                  name: tag
+                  type: varchar(255)
   - changeSet:
-      id: '2022033102'
+      id: '2022040402'
+      author: 'Nikolay Vasilev'
+      changes:
+        - createTable:
+            tableName: 'modules'
+            columns:
+              - column:
+                  name: module_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_module
+              - column:
+                  name: title
+                  type: varchar(255)
+              - column:
+                  name: description
+                  type: longtext
+              - column:
+                  name: author
+                  type: varchar(255)
+              - column:
+                  name: date_created
+                  type: timestamp
+              - column:
+                  name: change_author
+                  type: varchar(255)
+              - column:
+                  name: date_changed
+                  type: timestamp
+              - column:
+                  name: delete_author
+                  type: varchar(255)
+              - column:
+                  name: date_deleted
+                  type: timestamp
+              - column:
+                  name: course_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_module_course
+                    references: courses(course_id)
+  - changeSet:
+      id: '2022040403'
       author: 'Nikolay Vasilev'
       changes:
         - createTable:
@@ -42,14 +106,32 @@ databaseChangeLog:
                   name: text
                   type: longtext
               - column:
-                  name: course_id
+                  name: author
+                  type: varchar(255)
+              - column:
+                  name: date_created
+                  type: timestamp
+              - column:
+                  name: change_author
+                  type: varchar(255)
+              - column:
+                  name: date_changed
+                  type: timestamp
+              - column:
+                  name: delete_author
+                  type: varchar(255)
+              - column:
+                  name: date_deleted
+                  type: timestamp
+              - column:
+                  name: module_id
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_lesson_course
-                    references: courses(course_id)
+                    foreignKeyName: fk_lesson_module
+                    references: modules(module_id)
   - changeSet:
-      id: '2022010401'
+      id: '2022040404'
       author: 'Nikolay Vasilev'
       changes:
         - createTable:
@@ -64,10 +146,72 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_users
               - column:
+                  name: nickname
+                  type: varchar(255)
+              - column:
+                  name: password
+                  type: varchar(255)
+              - column:
                   name: username
                   type: varchar(255)
+              - column:
+                  name: email
+                  type: varchar(255)
+              - column:
+                  name: avatar
+                  type: blob
+              - column:
+                  name: registration_date
+                  type: timestamp
+              - column:
+                  name: change_author
+                  type: varchar(255)
+              - column:
+                  name: date_changed
+                  type: timestamp
+              - column:
+                  name: delete_author
+                  type: varchar(255)
+              - column:
+                  name: date_deleted
+                  type: timestamp
+              - column:
+                  name: admin
+                  type: boolean
   - changeSet:
-      id: '2022010402'
+      id: '2022040405'
+      author: 'Nikolay Vasilev'
+      changes:
+        - createTable:
+            tableName: 'ratings'
+            columns:
+              - column:
+                  name: rating_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_rating
+              - column:
+                  name: rating_value
+                  type: tinyint
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_rating_user
+                    references: users(user_id)
+              - column:
+                  name: course_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_rating_course
+                    references: courses(course_id)
+  - changeSet:
+      id: '2022040406'
       author: 'Nikolay Vasilev'
       changes:
         - createTable:
