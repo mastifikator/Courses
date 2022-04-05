@@ -4,14 +4,14 @@ public class LessonResponse {
     private Long id;
     private String title;
     private String text;
-    private Long course_id;
+    private Long courseId;
     private String actionDescription;
 
-    public LessonResponse(Long id, String title, String text, Long course_id, String actionDescription) {
+    public LessonResponse(Long id, String title, String text, Long courseId, String actionDescription) {
         this.id = id;
         this.title = title;
         this.text = text;
-        this.course_id = course_id;
+        this.courseId = courseId;
         this.actionDescription = actionDescription;
     }
 
@@ -39,12 +39,12 @@ public class LessonResponse {
         this.text = text;
     }
 
-    public Long getCourse_id() {
-        return course_id;
+    public Long getCourseId() {
+        return courseId;
     }
 
-    public void setCourse_id(Long course_id) {
-        this.course_id = course_id;
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
     public String getActionDescription() {
