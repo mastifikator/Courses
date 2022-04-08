@@ -211,6 +211,24 @@ databaseChangeLog:
                     foreignKeyName: fk_rating_course
                     references: courses(course_id)
   - changeSet:
+      id: '2022050401'
+      author: 'Nikolay Vasilev'
+      changes:
+        - createTable:
+            tableName: 'roles'
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_role
+              - column:
+                  name: name
+                  type: varchar(255)
+  - changeSet:
       id: '2022040406'
       author: 'Nikolay Vasilev'
       changes:
@@ -224,6 +242,27 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_courses
                     references: courses(course_id)
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_users
+                    references: users(user_id)
+  - changeSet:
+      id: '2022050402'
+      author: 'Nikolay Vasilev'
+      changes:
+        - createTable:
+            tableName: 'roles_users'
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_roles
+                    references: roles(role_id)
               - column:
                   name: user_id
                   type: bigint

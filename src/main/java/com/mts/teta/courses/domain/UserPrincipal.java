@@ -6,7 +6,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class UserPrincipal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,13 +16,19 @@ public class User {
     @Column
     private String username;
 
+    @Column
+    private String password;
+
     @ManyToMany(mappedBy = "users")
     private Set<Course> courses;
 
-    public User() {
+    @ManyToMany(mappedBy = "users")
+    private Set<Role> roles;
+
+    public UserPrincipal() {
     }
 
-    public User(String username) {
+    public UserPrincipal(String username) {
         this.username = username;
     }
 
@@ -50,12 +56,28 @@ public class User {
         this.courses = courses;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(userId, user.userId) && Objects.equals(username, user.username);
+        UserPrincipal userPrincipal = (UserPrincipal) o;
+        return Objects.equals(userId, userPrincipal.userId) && Objects.equals(username, userPrincipal.username);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.mts.teta.courses.service;
 
 import com.mts.teta.courses.dao.CourseRepository;
 import com.mts.teta.courses.domain.Course;
-import com.mts.teta.courses.domain.User;
+import com.mts.teta.courses.domain.UserPrincipal;
 import com.mts.teta.courses.dto.CourseRequestToCreate;
 import com.mts.teta.courses.dto.CourseRequestToUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,22 +46,22 @@ public class CourseLister {
     }
 
     public Course assignedUserToCourse(Long courseId, Long userId) {
-        User user = userLister.userById(userId);
+        UserPrincipal userPrincipal = userLister.userById(userId);
         Course course = courseById(courseId);
 
-        course.getUsers().add(user);
+        course.getUsers().add(userPrincipal);
         return saveCourse(course);
     }
 
     public Course unassignedUserToCourse(Long courseId, Long userId) {
-        User user = userLister.userById(userId);
+        UserPrincipal userPrincipal = userLister.userById(userId);
         Course course = courseById(courseId);
 
-        course.getUsers().remove(user);
+        course.getUsers().remove(userPrincipal);
         return saveCourse(course);
     }
 
-    public Set<User> getUsersFromCourse(Long courseId) {
+    public Set<UserPrincipal> getUsersFromCourse(Long courseId) {
         return courseById(courseId).getUsers();
     }
 
