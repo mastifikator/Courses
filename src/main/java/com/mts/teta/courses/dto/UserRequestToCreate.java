@@ -6,6 +6,11 @@ public class UserRequestToCreate {
     @NotBlank(message = "username must be filled")
     private String username;
 
+    @NotBlank(message = "password must be filled")
+    private String password;
+
+    public UserRequestToCreate() {
+    }
 
     public String getUsername() {
         return username;
@@ -13,6 +18,14 @@ public class UserRequestToCreate {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

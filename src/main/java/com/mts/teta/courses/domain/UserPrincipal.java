@@ -28,8 +28,9 @@ public class UserPrincipal {
     public UserPrincipal() {
     }
 
-    public UserPrincipal(String username) {
+    public UserPrincipal(String username, String password) {
         this.username = username;
+        this.password = password;
     }
 
     public Long getUserId() {

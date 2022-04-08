@@ -7,7 +7,10 @@ import com.mts.teta.courses.domain.UserPrincipal;
 import com.mts.teta.courses.dto.UserRequestToCreate;
 import com.mts.teta.courses.dto.UserRequestToUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
 
 @Component
 public class UserLister {
@@ -15,10 +18,13 @@ public class UserLister {
 
     private final RoleRepository roleRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserLister(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserLister(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserPrincipal userById(Long userId) {
@@ -26,7 +32,9 @@ public class UserLister {
     }
 
     public UserPrincipal createUser(UserRequestToCreate request) {
-        UserPrincipal userPrincipal = new UserPrincipal(request.getUsername());
+        UserPrincipal userPrincipal = new UserPrincipal(request.getUsername(),
+                passwordEncoder.encode(request.getPassword()));
+
         userRepository.save(userPrincipal);
         return userPrincipal;
     }
@@ -34,6 +42,8 @@ public class UserLister {
     public UserPrincipal updateUser(Long userId, UserRequestToUpdate request) {
         UserPrincipal userPrincipal = userRepository.getById(userId);
         userPrincipal.setUsername(request.getUsername());
+        userPrincipal.setPassword(passwordEncoder.encode(request.getPassword()));
+
         userRepository.save(userPrincipal);
         return userPrincipal;
     }
@@ -45,18 +55,22 @@ public class UserLister {
     public UserPrincipal assignedRoleToUser(Long roleId, Long userId) {
         UserPrincipal userPrincipal = userRepository.getById(userId);
         Role role = roleRepository.getById(roleId);
+        role.getUsers().add(userPrincipal);
 
-        userPrincipal.getRoles().add(role);
-        userRepository.save(userPrincipal);
+        roleRepository.save(role);
         return userPrincipal;
     }
 
     public UserPrincipal unassignedRoleFromUser(Long roleId, Long userId) {
         UserPrincipal userPrincipal = userRepository.getById(userId);
         Role role = roleRepository.getById(roleId);
+        role.getUsers().remove(userPrincipal);
 
-        userPrincipal.getRoles().remove(role);
-        userRepository.save(userPrincipal);
+        roleRepository.save(role);
         return userPrincipal;
+    }
+
+    public Set<Role> getRolesByUserId(Long userId) {
+        return userRepository.getById(userId).getRoles();
     }
 }
