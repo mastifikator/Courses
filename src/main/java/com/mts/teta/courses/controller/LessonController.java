@@ -7,6 +7,7 @@ import com.mts.teta.courses.mapper.LessonControllerMapper;
 import com.mts.teta.courses.service.LessonLister;
 import com.mts.teta.courses.service.StatisticsCounter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,6 +33,7 @@ public class LessonController {
         return lessonControllerMapper.mapLessonToLessonResponse(lessonLister.lessonById(lessonId), GET_ANSWER);
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping
     public LessonResponse createLesson(@Valid @RequestBody LessonRequestToCreate request) {
         statisticsCounter.countHandlerCall(CREATE_ANSWER + request);
@@ -41,6 +43,7 @@ public class LessonController {
                         .createLesson(request), CREATE_ANSWER);
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping("/{lessonId}")
     public LessonResponse updateLesson(@PathVariable Long lessonId,
                                        @Valid @RequestBody LessonRequestToUpdate request) {
@@ -51,6 +54,7 @@ public class LessonController {
                         .updateLesson(lessonId, request), UPDATE_ANSWER);
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{lessonId}")
     public void deleteLesson(@PathVariable Long lessonId) {
         statisticsCounter.countHandlerCall(DELETE_ANSWER + lessonId);

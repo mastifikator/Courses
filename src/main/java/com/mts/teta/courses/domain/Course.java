@@ -29,7 +29,7 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<User> users;
+    private Set<UserPrincipal> users;
 
     public Course() {
     }
@@ -72,12 +72,12 @@ public class Course {
         this.lessons = lessons;
     }
 
-    public Set<User> getUsers() {
+    public Set<UserPrincipal> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setUsers(Set<UserPrincipal> userPrincipals) {
+        this.users = userPrincipals;
     }
 
     @Override

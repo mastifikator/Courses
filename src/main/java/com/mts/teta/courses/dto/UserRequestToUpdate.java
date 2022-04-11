@@ -6,6 +6,11 @@ public class UserRequestToUpdate {
     @NotBlank(message = "username must be filled")
     private String username;
 
+    @NotBlank(message = "password must be filled")
+    private String password;
+
+    public UserRequestToUpdate() {
+    }
 
     public String getUsername() {
         return username;
@@ -13,6 +18,14 @@ public class UserRequestToUpdate {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

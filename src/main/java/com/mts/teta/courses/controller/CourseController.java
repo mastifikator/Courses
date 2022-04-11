@@ -1,7 +1,5 @@
 package com.mts.teta.courses.controller;
 
-import com.mts.teta.courses.domain.Course;
-import com.mts.teta.courses.domain.User;
 import com.mts.teta.courses.dto.CourseRequestToCreate;
 import com.mts.teta.courses.dto.CourseRequestToUpdate;
 import com.mts.teta.courses.dto.CourseResponse;
@@ -11,10 +9,11 @@ import com.mts.teta.courses.mapper.LessonControllerMapper;
 import com.mts.teta.courses.service.CourseLister;
 import com.mts.teta.courses.service.LessonLister;
 import com.mts.teta.courses.service.StatisticsCounter;
-import com.mts.teta.courses.service.UserLister;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,7 +47,7 @@ public class CourseController {
         return courseControllerMapper.mapCourseToCourseResponse(courseLister.courseById(courseId), GET_ANSWER);
     }
 
-    @GetMapping("/filteredUsers")
+    @GetMapping("/filteredCourses")
     public List<CourseResponse> getCoursesByTitlePrefix(@RequestParam(value = "titlePrefix", required = false) String titlePrefix) {
         statisticsCounter.countHandlerCall(FILTER_ANSWER + titlePrefix);
 
@@ -59,6 +58,7 @@ public class CourseController {
                 .collect(Collectors.toList());
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping
     public CourseResponse createCourse(@Valid @RequestBody CourseRequestToCreate request) {
         statisticsCounter.countHandlerCall(CREATE_ANSWER + request);
@@ -68,6 +68,7 @@ public class CourseController {
                         .createCourse(request), CREATE_ANSWER);
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping("/{courseId}")
     public CourseResponse updateCourse(@PathVariable Long courseId,
                                        @Valid @RequestBody CourseRequestToUpdate request) {
@@ -78,18 +79,21 @@ public class CourseController {
                         .updateCourse(courseId, request), UPDATE_ANSWER);
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{courseId}")
     public void deleteCourse(@PathVariable Long courseId) {
         statisticsCounter.countHandlerCall(DELETE_ANSWER + courseId);
         courseLister.deleteCourse(courseId);
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/{courseId}/users")
     public void getUsersFromCourse(@PathVariable Long courseId) {
         statisticsCounter.countHandlerCall(USERS_FOUND_ANSWER + courseId);
         courseLister.getUsersFromCourse(courseId);
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping("/{courseId}/users/{userId}")
     public CourseResponse assignUserToCourse(@PathVariable("courseId") Long courseId,
                                              @PathVariable("userId") Long userId) {
@@ -99,6 +103,7 @@ public class CourseController {
                         .assignedUserToCourse(courseId, userId), ASSIGN_ANSWER);
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{courseId}/users/{userId}")
     public CourseResponse unassignedUserFromCourse(@PathVariable("courseId") Long courseId,
                                                    @PathVariable("userId") Long userId) {
