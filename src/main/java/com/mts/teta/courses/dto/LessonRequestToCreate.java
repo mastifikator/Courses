@@ -14,8 +14,8 @@ public class LessonRequestToCreate {
     @NotBlank(message = "Text lesson has to be filled")
     private String text;
 
-    @NotNull(message = "CourseId has to be filled")
-    private Long courseId;
+    @NotNull(message = "ModuleId has to be filled")
+    private Long moduleId;
 
     public String getTitle() {
         return title;
@@ -33,20 +33,12 @@ public class LessonRequestToCreate {
         this.text = text;
     }
 
-    public Long getCourseId() {
-        return courseId;
+    public Long getModuleId() {
+        return moduleId;
     }
 
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
+    public void setModuleId(Long moduleId) {
+        this.moduleId = moduleId;
     }
 
-    @Override
-    public String toString() {
-        return "LessonRequestToCreate{" +
-                "title='" + title + '\'' +
-                ", text='" + text + '\'' +
-                ", courseId=" + courseId +
-                '}';
-    }
 }

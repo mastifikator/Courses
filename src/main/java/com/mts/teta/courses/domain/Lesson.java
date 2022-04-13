@@ -19,16 +19,16 @@ public class Lesson {
     private String text;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "course_id")
-    private Course course;
+    @JoinColumn(name = "module_id")
+    private Module module;
 
     public Lesson() {
     }
 
-    public Lesson(String title, String text, Course course) {
+    public Lesson(String title, String text, Module module) {
         this.title = title;
         this.text = text;
-        this.course = course;
+        this.module = module;
     }
 
     public Long getLessonId() {
@@ -55,11 +55,11 @@ public class Lesson {
         this.text = text;
     }
 
-    public Course getCourse() {
-        return course;
+    public Module getModule() {
+        return module;
     }
 
-    public void setCourse(Course course) {
-        this.course = course;
+    public void setModule(Module module) {
+        this.module = module;
     }
 }

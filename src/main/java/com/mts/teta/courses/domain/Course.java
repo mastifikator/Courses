@@ -21,7 +21,7 @@ public class Course {
     private String title;
 
     @OneToMany(mappedBy = "course", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Lesson> lessons;
+    private List<Module> modules;
 
     @ManyToMany
     @JoinTable(
@@ -34,8 +34,7 @@ public class Course {
     public Course() {
     }
 
-    public Course(Long courseId, String author, String title) {
-        this.courseId = courseId;
+    public Course(String author, String title) {
         this.author = author;
         this.title = title;
     }
@@ -64,12 +63,12 @@ public class Course {
         this.title = title;
     }
 
-    public List<Lesson> getLessons() {
-        return lessons;
+    public List<Module> getModules() {
+        return modules;
     }
 
-    public void setLessons(List<Lesson> lessons) {
-        this.lessons = lessons;
+    public void setModules(List<Module> modules) {
+        this.modules = modules;
     }
 
     public Set<UserPrincipal> getUsers() {

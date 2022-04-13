@@ -11,7 +11,7 @@ public class LessonControllerMapper {
         return new LessonResponse(lesson.getLessonId(),
                 lesson.getTitle(),
                 lesson.getText(),
-                lesson.getCourse().getCourseId(),
+                lesson.getModule().getModuleId(),
                 actionResponse);
     }
 }

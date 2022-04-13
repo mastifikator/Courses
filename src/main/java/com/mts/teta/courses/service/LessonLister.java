@@ -1,8 +1,8 @@
 package com.mts.teta.courses.service;
 
 import com.mts.teta.courses.dao.LessonRepository;
-import com.mts.teta.courses.domain.Course;
 import com.mts.teta.courses.domain.Lesson;
+import com.mts.teta.courses.domain.Module;
 import com.mts.teta.courses.dto.LessonRequestToCreate;
 import com.mts.teta.courses.dto.LessonRequestToUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +14,14 @@ import java.util.List;
 public class LessonLister {
 
     @Autowired
-    private CourseLister courseLister;
+    private ModuleLister moduleLister;
 
     @Autowired
     private LessonRepository lessonRepository;
 
     public Lesson createLesson(LessonRequestToCreate request) {
-        Course course = courseLister.courseById(request.getCourseId());
-        Lesson lesson = new Lesson(request.getTitle(), request.getText(), course);
+        Module module = moduleLister.moduleById(request.getModuleId());
+        Lesson lesson = new Lesson(request.getTitle(), request.getText(), module);
         lessonRepository.save(lesson);
         return lesson;
     }
@@ -42,7 +42,7 @@ public class LessonLister {
         lessonRepository.deleteById(lessonId);
     }
 
-    public List<Lesson> lessonsByCourseId(Long courseId) {
-        return lessonRepository.findAllLessonsForCourse(courseId);
+    public List<Lesson> lessonsByModuleId(Long moduleId) {
+        return lessonRepository.findAllLessonsForModule(moduleId);
     }
 }

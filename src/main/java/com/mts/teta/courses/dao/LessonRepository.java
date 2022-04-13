@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
-    @Query("select c.lessons " +
-            "from Course c " +
-            "where c.courseId = :courseId")
-    List<Lesson> findAllLessonsForCourse(Long courseId);
+    @Query("select m.lessons " +
+            "from Module m " +
+            "where m.moduleId = :moduleId")
+    List<Lesson> findAllLessonsForModule(Long moduleId);
 }

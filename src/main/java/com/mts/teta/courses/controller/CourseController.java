@@ -114,10 +114,10 @@ public class CourseController {
     }
 
     @GetMapping("/{courseId}/lessons")
-    public List<LessonResponse> getLessonsForCourse(@PathVariable("courseId") Long courseId) {
-        statisticsCounter.countHandlerCall("getLessons for course " + courseId);
+    public List<LessonResponse> getLessonsForModule(@PathVariable("moduleId") Long moduleId) {
+        statisticsCounter.countHandlerCall("getLessons for module " + moduleId);
 
-        return lessonLister.lessonsByCourseId(courseId)
+        return lessonLister.lessonsByModuleId(moduleId)
                 .stream()
                 .map(l -> lessonControllerMapper.mapLessonToLessonResponse(l, GET_ANSWER))
                 .collect(Collectors.toList());

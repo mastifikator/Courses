@@ -40,7 +40,7 @@ public class CourseLister {
     }
 
     public Course createCourse(CourseRequestToCreate request) {
-        Course course = new Course(null, request.getAuthor(), request.getTitle());
+        Course course = new Course(request.getAuthor(), request.getTitle());
         repository.save(course);
         return course;
     }
