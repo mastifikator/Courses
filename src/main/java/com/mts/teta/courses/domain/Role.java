@@ -24,6 +24,10 @@ public class Role {
     )
     private Set<UserPrincipal> users;
 
+    public Role(String name) {
+        this.name = name;
+    }
+
     public Role() {
     }
 

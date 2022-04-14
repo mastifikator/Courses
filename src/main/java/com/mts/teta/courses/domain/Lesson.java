@@ -1,6 +1,7 @@
 package com.mts.teta.courses.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "lessons")
@@ -61,5 +62,18 @@ public class Lesson {
 
     public void setModule(Module module) {
         this.module = module;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lesson lesson = (Lesson) o;
+        return Objects.equals(lessonId, lesson.lessonId) && Objects.equals(title, lesson.title) && Objects.equals(text, lesson.text);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lessonId, title, text);
     }
 }

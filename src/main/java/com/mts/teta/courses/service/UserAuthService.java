@@ -2,17 +2,20 @@ package com.mts.teta.courses.service;
 
 import com.mts.teta.courses.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.stream.Collectors;
 
 @Service
+@Component
 public class UserAuthService implements UserDetailsService {
 
     private final UserRepository userRepository;

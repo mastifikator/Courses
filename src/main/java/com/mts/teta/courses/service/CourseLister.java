@@ -13,14 +13,14 @@ import java.util.Set;
 
 @Component
 public class CourseLister {
+
     private final CourseRepository repository;
+    private final UserLister userLister;
 
     @Autowired
-    UserLister userLister;
-
-    @Autowired
-    public CourseLister(CourseRepository repository) {
+    public CourseLister(CourseRepository repository, UserLister userLister) {
         this.repository = repository;
+        this.userLister = userLister;
     }
 
     public Course courseById(Long courseId) {
