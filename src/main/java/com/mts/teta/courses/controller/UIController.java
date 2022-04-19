@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.stream.Collectors;
 
@@ -39,17 +40,26 @@ public class UIController {
         return "index.html";
     }
 
-    @GetMapping("/learn/{courseId}")
-    public String courses(@PathVariable("courseId") Long courseId, Model model) {
-        statisticsCounter.countHandlerCall("getCourses");
+    @GetMapping("/search")
+    public String search(@RequestParam(value = "titlePrefix", required = false) String titlePrefix, Model model) {
+        statisticsCounter.countHandlerCall("searchCourses");
 
-        model.addAttribute("title", "Courses");
-        model.addAttribute("theme", courseLister
-                .getAllCourses()
+        model.addAttribute("title", "Search Result");
+        model.addAttribute("courses", courseLister.coursesByTitlePrefix(titlePrefix)
                 .stream()
                 .map(c -> courseControllerMapper.mapCourseToCourseResponse(c, GET_ANSWER))
                 .collect(Collectors.toList()));
 
-        return "index.html";
+        return "search.html";
+    }
+
+    @GetMapping("/learn/{courseId}")
+    public String learn(@PathVariable("courseId") Long courseId, Model model) {
+        statisticsCounter.countHandlerCall("learnCourses");
+
+        model.addAttribute("course", courseLister.courseById(courseId));
+        model.addAttribute("title", "Learn");
+
+        return "learn.html";
     }
 }

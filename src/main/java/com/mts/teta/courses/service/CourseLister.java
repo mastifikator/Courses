@@ -33,7 +33,7 @@ public class CourseLister {
     }
 
     public List<Course> coursesByTitlePrefix(String titlePrefix) {
-        return repository.findByTitleLike(titlePrefix + "%");
+        return repository.findByTitleLike("%" + titlePrefix + "%");
     }
 
     public Course updateCourse(Long courseId, CourseRequestToUpdate request) {
