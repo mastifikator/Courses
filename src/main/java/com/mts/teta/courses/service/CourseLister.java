@@ -24,6 +24,10 @@ public class CourseLister {
         this.userLister = userLister;
     }
 
+    public List<Course> getAllCourses() {
+        return repository.findAll();
+    }
+
     public Course courseById(Long courseId) {
         return repository.findById(courseId).orElseThrow();
     }
