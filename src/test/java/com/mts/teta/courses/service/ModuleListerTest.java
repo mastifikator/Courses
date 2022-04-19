@@ -5,6 +5,7 @@ import com.mts.teta.courses.dto.ModuleRequestToCreate;
 import com.mts.teta.courses.dto.ModuleRequestToUpdate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -17,6 +18,7 @@ class ModuleListerTest extends PreparedDatabase {
     ModuleLister moduleLister;
 
     @Test
+    @Transactional
     void createModule() {
         ModuleRequestToCreate moduleRequestToCreate = new ModuleRequestToCreate();
         moduleRequestToCreate.setTitle("Title4");
@@ -51,6 +53,7 @@ class ModuleListerTest extends PreparedDatabase {
     }
 
     @Test
+    @Transactional
     void deleteModule() {
         ModuleRequestToCreate moduleRequestToCreate = new ModuleRequestToCreate();
         moduleRequestToCreate.setTitle("Title5");
@@ -66,6 +69,7 @@ class ModuleListerTest extends PreparedDatabase {
     }
 
     @Test
+    @Transactional
     void modulesByCourseId() {
         List<Module> modules = moduleLister.modulesByCourseId(1L);
 

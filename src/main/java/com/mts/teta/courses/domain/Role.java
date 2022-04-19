@@ -1,6 +1,7 @@
 package com.mts.teta.courses.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ public class Role {
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<UserPrincipal> users;
+    private Set<UserPrincipal> users = new HashSet<>();
 
     public Role(String name) {
         this.name = name;

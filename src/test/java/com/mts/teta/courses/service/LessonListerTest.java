@@ -5,6 +5,7 @@ import com.mts.teta.courses.dto.LessonRequestToCreate;
 import com.mts.teta.courses.dto.LessonRequestToUpdate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -51,6 +52,7 @@ class LessonListerTest extends PreparedDatabase {
     }
 
     @Test
+    @Transactional
     void deleteLesson() {
         LessonRequestToCreate lessonRequestToCreate = new LessonRequestToCreate();
         lessonRequestToCreate.setTitle("Title5");

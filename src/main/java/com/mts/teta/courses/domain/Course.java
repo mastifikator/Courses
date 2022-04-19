@@ -1,6 +1,7 @@
 package com.mts.teta.courses.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<UserPrincipal> users;
+    private Set<UserPrincipal> users = new HashSet<>();
 
     public Course() {
     }

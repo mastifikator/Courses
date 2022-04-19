@@ -2,6 +2,7 @@ package com.mts.teta.courses.service;
 
 import com.mts.teta.courses.dao.RoleRepository;
 import com.mts.teta.courses.dao.UserRepository;
+import com.mts.teta.courses.domain.Course;
 import com.mts.teta.courses.domain.Role;
 import com.mts.teta.courses.domain.UserPrincipal;
 import com.mts.teta.courses.dto.UserRequestToCreate;
@@ -55,10 +56,12 @@ public class UserLister {
     public UserPrincipal assignedRoleToUser(Long roleId, Long userId) {
         UserPrincipal userPrincipal = userRepository.getById(userId);
         Role role = roleRepository.getById(roleId);
-        role.getUsers().add(userPrincipal);
 
+        role.getUsers().add(userPrincipal);
+        userPrincipal.getRoles().add(role);
         roleRepository.save(role);
-        return userPrincipal;
+
+        return saveUser(userPrincipal);
     }
 
     public UserPrincipal unassignedRoleFromUser(Long roleId, Long userId) {
@@ -72,5 +75,9 @@ public class UserLister {
 
     public Set<Role> getRolesByUserId(Long userId) {
         return userRepository.getById(userId).getRoles();
+    }
+
+    public UserPrincipal saveUser(UserPrincipal user) {
+        return userRepository.saveAndFlush(user);
     }
 }

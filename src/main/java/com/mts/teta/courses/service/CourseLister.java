@@ -8,6 +8,7 @@ import com.mts.teta.courses.dto.CourseRequestToUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -50,6 +51,9 @@ public class CourseLister {
         Course course = courseById(courseId);
 
         course.getUsers().add(userPrincipal);
+        userPrincipal.getCourses().add(course);
+        userLister.saveUser(userPrincipal);
+
         return saveCourse(course);
     }
 
@@ -70,6 +74,6 @@ public class CourseLister {
     }
 
     public Course saveCourse(Course course) {
-        return repository.save(course);
+        return repository.saveAndFlush(course);
     }
 }

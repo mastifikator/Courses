@@ -6,6 +6,7 @@ import com.mts.teta.courses.dto.CourseRequestToCreate;
 import com.mts.teta.courses.dto.CourseRequestToUpdate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -20,6 +21,7 @@ class CourseListerTest extends PreparedDatabase {
     protected CourseLister courseLister;
 
     @Test
+    @Transactional
     void courseById() {
         Course course = courseLister.courseById(1L);
 
@@ -28,6 +30,7 @@ class CourseListerTest extends PreparedDatabase {
     }
 
     @Test
+    @Transactional
     void coursesByTitlePrefix() {
         List<Course> courses = courseLister.coursesByTitlePrefix("Title1");
 
@@ -47,6 +50,7 @@ class CourseListerTest extends PreparedDatabase {
     }
 
     @Test
+    @Transactional
     void createCourse() {
         CourseRequestToCreate courseRequestToCreate = new CourseRequestToCreate();
         courseRequestToCreate.setTitle("Title4");
@@ -62,8 +66,7 @@ class CourseListerTest extends PreparedDatabase {
     void assignedUserToCourse() {
         courseLister.assignedUserToCourse(1L, 1L);
 
-        assertEquals(userRepository.getById(1L).getCourses().size(), 1);
-        courseLister.unassignedUserToCourse(1L, 1L);
+        assertEquals(1, userRepository.getById(1L).getCourses().size());
     }
 
     @Test
@@ -72,7 +75,7 @@ class CourseListerTest extends PreparedDatabase {
         courseLister.assignedUserToCourse(1L, 1L);
         courseLister.unassignedUserToCourse(1L, 1L);
 
-        assertEquals(userRepository.getById(1L).getCourses().size(), 1);
+        assertEquals(1, userRepository.getById(1L).getCourses().size());
     }
 
     @Test
@@ -86,6 +89,7 @@ class CourseListerTest extends PreparedDatabase {
     }
 
     @Test
+    @Transactional
     void deleteCourse() {
         CourseRequestToCreate courseRequestToCreate = new CourseRequestToCreate();
         courseRequestToCreate.setTitle("Title5");
@@ -99,6 +103,7 @@ class CourseListerTest extends PreparedDatabase {
     }
 
     @Test
+    @Transactional
     void saveCourse() {
         Course course = new Course("Author5", "Title5");
         courseLister.saveCourse(course);

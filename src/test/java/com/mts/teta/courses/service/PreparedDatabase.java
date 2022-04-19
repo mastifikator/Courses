@@ -1,19 +1,24 @@
 package com.mts.teta.courses.service;
 
 import com.mts.teta.courses.dao.*;
-import com.mts.teta.courses.domain.*;
 import com.mts.teta.courses.domain.Module;
-import org.junit.jupiter.api.BeforeAll;
+import com.mts.teta.courses.domain.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Set;
+import java.util.ArrayList;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class PreparedDatabase {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     protected UserRepository userRepository;
@@ -30,44 +35,69 @@ public abstract class PreparedDatabase {
     @Autowired
     protected RoleRepository roleRepository;
 
-    @BeforeAll
+    @BeforeEach
+    @Transactional
     void prepareDatabase() {
         Course course1 = new Course("Author1", "Title1");
         Course course2 = new Course("Author2", "Title2");
         Course course3 = new Course("Author3", "Title3");
+        ArrayList<Course> courses = new ArrayList<>();
+        courses.add(course1);
+        courses.add(course2);
+        courses.add(course3);
+        courseRepository.saveAllAndFlush(courses);
 
         Module module1 = new Module("Title1", "Author1", "Description1", course1);
         Module module2 = new Module("Title2", "Author2", "Description2", course2);
         Module module3 = new Module("Title3", "Author3", "Description3", course3);
+        ArrayList<Module> modules = new ArrayList<>();
+        modules.add(module1);
+        modules.add(module2);
+        modules.add(module3);
+        moduleRepository.saveAllAndFlush(modules);
 
         Lesson lesson1 = new Lesson("Title1", "Text1", module1);
         Lesson lesson2 = new Lesson("Title2", "Text2", module2);
         Lesson lesson3 = new Lesson("Title3", "Text3", module3);
+        ArrayList<Lesson> lessons = new ArrayList<>();
+        lessons.add(lesson1);
+        lessons.add(lesson2);
+        lessons.add(lesson3);
+        lessonRepository.saveAllAndFlush(lessons);
 
         Role role1 = new Role("Role1");
         Role role2 = new Role("Role2");
         Role role3 = new Role("Role3");
+        ArrayList<Role> roles = new ArrayList<>();
+        roles.add(role1);
+        roles.add(role2);
+        roles.add(role3);
+        roleRepository.saveAllAndFlush(roles);
 
         UserPrincipal userPrincipal1 = new UserPrincipal("user1", "pass1");
         UserPrincipal userPrincipal2 = new UserPrincipal("user2", "pass2");
         UserPrincipal userPrincipal3 = new UserPrincipal("user3", "pass3");
+        ArrayList<UserPrincipal> users = new ArrayList<>();
+        users.add(userPrincipal1);
+        users.add(userPrincipal2);
+        users.add(userPrincipal3);
+        userRepository.saveAllAndFlush(users);
 
-        module1.setLessons(List.of(lesson1));
-        module2.setLessons(List.of(lesson2));
-        module3.setLessons(List.of(lesson3));
+    }
 
-        course1.setModules(List.of(module1));
-        course2.setModules(List.of(module2));
-        course3.setModules(List.of(module3));
+    @AfterEach
+    @Transactional
+    void clearDatabase() {
+        jdbcTemplate.execute("TRUNCATE TABLE lessons CASCADE");
+        jdbcTemplate.execute("TRUNCATE TABLE modules CASCADE");
+        jdbcTemplate.execute("TRUNCATE TABLE courses CASCADE");
+        jdbcTemplate.execute("TRUNCATE TABLE users CASCADE");
+        jdbcTemplate.execute("TRUNCATE TABLE roles CASCADE");
 
-        course1.setUsers(Set.of(userPrincipal1));
-        course2.setUsers(Set.of(userPrincipal2));
-        course3.setUsers(Set.of(userPrincipal3));
-
-        userRepository.saveAll(List.of(userPrincipal1, userPrincipal2, userPrincipal3));
-        courseRepository.saveAll(List.of(course1, course2, course3));
-        moduleRepository.saveAll(List.of(module1, module2, module3));
-        lessonRepository.saveAll(List.of(lesson1, lesson2, lesson3));
-        roleRepository.saveAll(List.of(role1, role2, role3));
+        jdbcTemplate.execute("ALTER SEQUENCE lessons_lesson_id_seq RESTART");
+        jdbcTemplate.execute("ALTER SEQUENCE modules_module_id_seq RESTART");
+        jdbcTemplate.execute("ALTER SEQUENCE courses_course_id_seq RESTART");
+        jdbcTemplate.execute("ALTER SEQUENCE users_user_id_seq RESTART");
+        jdbcTemplate.execute("ALTER SEQUENCE roles_role_id_seq RESTART");
     }
 }

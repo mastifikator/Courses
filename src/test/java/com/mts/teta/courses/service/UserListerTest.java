@@ -18,6 +18,7 @@ class UserListerTest extends PreparedDatabase {
     UserLister userLister;
 
     @Test
+    @Transactional
     void userById() {
         assertEquals("user1", userLister.userById(1L).getUsername());
     }
@@ -47,6 +48,7 @@ class UserListerTest extends PreparedDatabase {
     }
 
     @Test
+    @Transactional
     void deleteUser() {
         UserRequestToCreate userRequestToCreate = new UserRequestToCreate();
         userRequestToCreate.setUsername("user5");
