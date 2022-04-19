@@ -69,7 +69,7 @@ class CourseControllerTest {
         mockMvc.perform(get("/course/filteredCourses")
                         .requestAttr("prefix", String.class))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
 
         verify(courseLister, times(1)).coursesByTitlePrefix(Mockito.any());
     }
@@ -86,7 +86,7 @@ class CourseControllerTest {
                         .content(objectMapper.writeValueAsString(courseRequestToCreate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -101,7 +101,7 @@ class CourseControllerTest {
                         .content(objectMapper.writeValueAsString(courseRequestToCreate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -116,7 +116,7 @@ class CourseControllerTest {
                         .content(objectMapper.writeValueAsString(courseRequestToUpdate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -131,7 +131,7 @@ class CourseControllerTest {
                         .content(objectMapper.writeValueAsString(courseRequestToUpdate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -140,7 +140,7 @@ class CourseControllerTest {
         mockMvc.perform(delete("/course/1")
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -148,7 +148,7 @@ class CourseControllerTest {
     void getUsersFromCourseShouldReturn200() throws Exception {
         mockMvc.perform(get("/course/1/users"))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -156,7 +156,7 @@ class CourseControllerTest {
     void assignUserToCourseShouldReturn200() throws Exception {
         mockMvc.perform(put("/course/1/users/1"))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -164,6 +164,6 @@ class CourseControllerTest {
     void unassignedUserToCourseShouldReturn200() throws Exception {
         mockMvc.perform(delete("/course/1/users/1"))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 }

@@ -53,7 +53,7 @@ class LessonControllerTest {
     void getLessonShouldReturn200() throws Exception {
         mockMvc.perform(get("/lesson/1"))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
 
         verify(lessonLister, times(1)).lessonById(1L);
     }
@@ -71,7 +71,7 @@ class LessonControllerTest {
                         .content(objectMapper.writeValueAsString(lessonRequestToCreate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -87,7 +87,7 @@ class LessonControllerTest {
                         .content(objectMapper.writeValueAsString(lessonRequestToCreate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -102,7 +102,7 @@ class LessonControllerTest {
                         .content(objectMapper.writeValueAsString(lessonRequestToUpdate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -117,7 +117,7 @@ class LessonControllerTest {
                         .content(objectMapper.writeValueAsString(lessonRequestToUpdate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -126,6 +126,6 @@ class LessonControllerTest {
         mockMvc.perform(delete("/lesson/1")
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 }

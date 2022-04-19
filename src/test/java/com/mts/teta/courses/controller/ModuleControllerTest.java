@@ -80,7 +80,7 @@ class ModuleControllerTest {
                         .content(objectMapper.writeValueAsString(moduleRequestToCreate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -97,7 +97,7 @@ class ModuleControllerTest {
                         .content(objectMapper.writeValueAsString(moduleRequestToCreate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -113,7 +113,7 @@ class ModuleControllerTest {
                         .content(objectMapper.writeValueAsString(moduleRequestToUpdate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -129,7 +129,7 @@ class ModuleControllerTest {
                         .content(objectMapper.writeValueAsString(moduleRequestToUpdate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -138,7 +138,7 @@ class ModuleControllerTest {
         mockMvc.perform(delete("/module/1")
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -146,6 +146,6 @@ class ModuleControllerTest {
     void getLessonsForModuleShouldReturn200() throws Exception {
         mockMvc.perform(get("/module/1/lessons"))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 }

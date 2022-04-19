@@ -56,7 +56,7 @@ class UserControllerTest {
     void getUserShouldReturn200() throws Exception {
         mockMvc.perform(get("/admin/user/1"))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -71,7 +71,7 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(userRequestToCreate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -86,7 +86,7 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(userRequestToUpdate))
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -95,7 +95,7 @@ class UserControllerTest {
         mockMvc.perform(delete("/admin/user/1")
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -104,7 +104,7 @@ class UserControllerTest {
         mockMvc.perform(put("/admin/user/1/roles/1")
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -113,7 +113,7 @@ class UserControllerTest {
         mockMvc.perform(delete("/admin/user/1/roles/1")
                         .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -121,6 +121,6 @@ class UserControllerTest {
     void getRoles() throws Exception {
         mockMvc.perform(delete("/admin/user/1/roles/1"))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
     }
 }
