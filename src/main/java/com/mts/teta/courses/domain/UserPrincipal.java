@@ -1,6 +1,7 @@
 package com.mts.teta.courses.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,10 +21,10 @@ public class UserPrincipal {
     private String password;
 
     @ManyToMany(mappedBy = "users")
-    private Set<Course> courses;
+    private Set<Course> courses = new HashSet<>();
 
     @ManyToMany(mappedBy = "users")
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public UserPrincipal() {
     }

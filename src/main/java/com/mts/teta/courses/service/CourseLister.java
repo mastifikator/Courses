@@ -8,19 +8,20 @@ import com.mts.teta.courses.dto.CourseRequestToUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Component
 public class CourseLister {
+
     private final CourseRepository repository;
+    private final UserLister userLister;
 
     @Autowired
-    UserLister userLister;
-
-    @Autowired
-    public CourseLister(CourseRepository repository) {
+    public CourseLister(CourseRepository repository, UserLister userLister) {
         this.repository = repository;
+        this.userLister = userLister;
     }
 
     public Course courseById(Long courseId) {
@@ -40,7 +41,7 @@ public class CourseLister {
     }
 
     public Course createCourse(CourseRequestToCreate request) {
-        Course course = new Course(null, request.getAuthor(), request.getTitle());
+        Course course = new Course(request.getAuthor(), request.getTitle());
         repository.save(course);
         return course;
     }
@@ -50,6 +51,9 @@ public class CourseLister {
         Course course = courseById(courseId);
 
         course.getUsers().add(userPrincipal);
+        userPrincipal.getCourses().add(course);
+        userLister.saveUser(userPrincipal);
+
         return saveCourse(course);
     }
 
@@ -70,6 +74,6 @@ public class CourseLister {
     }
 
     public Course saveCourse(Course course) {
-        return repository.save(course);
+        return repository.saveAndFlush(course);
     }
 }

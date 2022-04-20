@@ -1,17 +1,19 @@
 package com.mts.teta.courses.dto;
 
-public class LessonResponse {
+public class ModuleResponse {
     private Long id;
     private String title;
-    private String text;
-    private Long moduleId;
+    private String author;
+    private String description;
+    private Long courseId;
     private String actionDescription;
 
-    public LessonResponse(Long id, String title, String text, Long moduleId, String actionDescription) {
+    public ModuleResponse(Long id, String title, String author, String description, Long courseId, String actionDescription) {
         this.id = id;
         this.title = title;
-        this.text = text;
-        this.moduleId = moduleId;
+        this.author = author;
+        this.description = description;
+        this.courseId = courseId;
         this.actionDescription = actionDescription;
     }
 
@@ -31,20 +33,28 @@ public class LessonResponse {
         this.title = title;
     }
 
-    public String getText() {
-        return text;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Long getCourseId() {
-        return moduleId;
+        return courseId;
     }
 
     public void setCourseId(Long courseId) {
-        this.moduleId = courseId;
+        this.courseId = courseId;
     }
 
     public String getActionDescription() {

@@ -1,6 +1,7 @@
 package com.mts.teta.courses.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -21,7 +22,7 @@ public class Course {
     private String title;
 
     @OneToMany(mappedBy = "course", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Lesson> lessons;
+    private List<Module> modules;
 
     @ManyToMany
     @JoinTable(
@@ -29,13 +30,12 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<UserPrincipal> users;
+    private Set<UserPrincipal> users = new HashSet<>();
 
     public Course() {
     }
 
-    public Course(Long courseId, String author, String title) {
-        this.courseId = courseId;
+    public Course(String author, String title) {
         this.author = author;
         this.title = title;
     }
@@ -64,12 +64,12 @@ public class Course {
         this.title = title;
     }
 
-    public List<Lesson> getLessons() {
-        return lessons;
+    public List<Module> getModules() {
+        return modules;
     }
 
-    public void setLessons(List<Lesson> lessons) {
-        this.lessons = lessons;
+    public void setModules(List<Module> modules) {
+        this.modules = modules;
     }
 
     public Set<UserPrincipal> getUsers() {

@@ -3,19 +3,18 @@ package com.mts.teta.courses.controller;
 import com.mts.teta.courses.dto.CourseRequestToCreate;
 import com.mts.teta.courses.dto.CourseRequestToUpdate;
 import com.mts.teta.courses.dto.CourseResponse;
-import com.mts.teta.courses.dto.LessonResponse;
+import com.mts.teta.courses.dto.UserResponse;
 import com.mts.teta.courses.mapper.CourseControllerMapper;
-import com.mts.teta.courses.mapper.LessonControllerMapper;
+import com.mts.teta.courses.mapper.UserControllerMapper;
 import com.mts.teta.courses.service.CourseLister;
-import com.mts.teta.courses.service.LessonLister;
 import com.mts.teta.courses.service.StatisticsCounter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,13 +32,11 @@ public class CourseController {
     @Autowired
     private CourseLister courseLister;
     @Autowired
-    private LessonLister lessonLister;
-    @Autowired
     private StatisticsCounter statisticsCounter;
     @Autowired
     private CourseControllerMapper courseControllerMapper;
     @Autowired
-    private LessonControllerMapper lessonControllerMapper;
+    private UserControllerMapper userControllerMapper;
 
     @GetMapping("/{courseId}")
     public CourseResponse getCourse(@PathVariable("courseId") Long courseId) {
@@ -88,9 +85,13 @@ public class CourseController {
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/{courseId}/users")
-    public void getUsersFromCourse(@PathVariable Long courseId) {
+    public Set<UserResponse> getUsersFromCourse(@PathVariable Long courseId) {
         statisticsCounter.countHandlerCall(USERS_FOUND_ANSWER + courseId);
-        courseLister.getUsersFromCourse(courseId);
+
+        return courseLister.getUsersFromCourse(courseId)
+                .stream()
+                .map(u -> userControllerMapper.mapUserToUserResponse(u, USERS_FOUND_ANSWER))
+                .collect(Collectors.toSet());
     }
 
     @Secured("ROLE_ADMIN")
@@ -111,16 +112,6 @@ public class CourseController {
         return courseControllerMapper
                 .mapCourseToCourseResponse(courseLister
                         .unassignedUserToCourse(courseId, userId), UNASSIGNED_ANSWER);
-    }
-
-    @GetMapping("/{courseId}/lessons")
-    public List<LessonResponse> getLessonsForCourse(@PathVariable("courseId") Long courseId) {
-        statisticsCounter.countHandlerCall("getLessons for course " + courseId);
-
-        return lessonLister.lessonsByCourseId(courseId)
-                .stream()
-                .map(l -> lessonControllerMapper.mapLessonToLessonResponse(l, GET_ANSWER))
-                .collect(Collectors.toList());
     }
 
 }
