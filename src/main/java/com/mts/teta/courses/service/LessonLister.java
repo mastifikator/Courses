@@ -21,7 +21,7 @@ public class LessonLister {
 
     public Lesson createLesson(LessonRequestToCreate request) {
         Module module = moduleLister.moduleById(request.getModuleId());
-        Lesson lesson = new Lesson(request.getTitle(), request.getText(), module);
+        Lesson lesson = new Lesson(request.getTitle(), request.getText(), request.getAuthor(), module);
         lessonRepository.save(lesson);
         return lesson;
     }
@@ -30,6 +30,7 @@ public class LessonLister {
         Lesson lesson = lessonRepository.getById(lessonId);
         lesson.setTitle(request.getTitle());
         lesson.setText(request.getText());
+        lesson.setAuthor(request.getAuthor());
         lessonRepository.save(lesson);
         return lesson;
     }
@@ -43,6 +44,6 @@ public class LessonLister {
     }
 
     public List<Lesson> lessonsByModuleId(Long moduleId) {
-        return lessonRepository.findAllLessonsForModule(moduleId);
+        return lessonRepository.findAllByModule_ModuleId(moduleId);
     }
 }

@@ -2,13 +2,13 @@ package com.mts.teta.courses.service;
 
 import com.mts.teta.courses.dao.CourseRepository;
 import com.mts.teta.courses.domain.Course;
+import com.mts.teta.courses.domain.Module;
 import com.mts.teta.courses.domain.UserPrincipal;
 import com.mts.teta.courses.dto.CourseRequestToCreate;
 import com.mts.teta.courses.dto.CourseRequestToUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -40,12 +40,13 @@ public class CourseLister {
         Course course = repository.getById(courseId);
         course.setAuthor(request.getAuthor());
         course.setTitle(request.getTitle());
+        course.setDescription(request.getDescription());
         repository.save(course);
         return course;
     }
 
     public Course createCourse(CourseRequestToCreate request) {
-        Course course = new Course(request.getAuthor(), request.getTitle());
+        Course course = new Course(request.getAuthor(), request.getTitle(), request.getDescription());
         repository.save(course);
         return course;
     }
@@ -71,6 +72,10 @@ public class CourseLister {
 
     public Set<UserPrincipal> getUsersFromCourse(Long courseId) {
         return courseById(courseId).getUsers();
+    }
+
+    public List<Module> getModulesFromCourse(Long courseId) {
+        return courseById(courseId).getModules();
     }
 
     public void deleteCourse(Long courseId) {

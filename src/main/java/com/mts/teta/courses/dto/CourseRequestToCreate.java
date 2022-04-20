@@ -10,6 +10,8 @@ public class CourseRequestToCreate {
     private String author;
     @TitleCase(titleCaseValue = TitleCaseValue.ANY)
     private String title;
+    @NotBlank(message = "Course description has to be filled")
+    private String description;
 
     public String getAuthor() {
         return author;
@@ -27,11 +29,20 @@ public class CourseRequestToCreate {
         this.title = title;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return "CourseRequestToCreate{" +
                 "author='" + author + '\'' +
                 ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

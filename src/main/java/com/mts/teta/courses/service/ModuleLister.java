@@ -2,6 +2,7 @@ package com.mts.teta.courses.service;
 
 import com.mts.teta.courses.dao.ModuleRepository;
 import com.mts.teta.courses.domain.Course;
+import com.mts.teta.courses.domain.Lesson;
 import com.mts.teta.courses.domain.Module;
 import com.mts.teta.courses.dto.ModuleRequestToCreate;
 import com.mts.teta.courses.dto.ModuleRequestToUpdate;

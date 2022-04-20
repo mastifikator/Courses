@@ -38,9 +38,9 @@ public abstract class PreparedDatabase {
     @BeforeEach
     @Transactional
     void prepareDatabase() {
-        Course course1 = new Course("Author1", "Title1");
-        Course course2 = new Course("Author2", "Title2");
-        Course course3 = new Course("Author3", "Title3");
+        Course course1 = new Course("Author1", "Title1", "Description1");
+        Course course2 = new Course("Author2", "Title2", "Description2");
+        Course course3 = new Course("Author3", "Title3", "Description3");
         ArrayList<Course> courses = new ArrayList<>();
         courses.add(course1);
         courses.add(course2);
@@ -56,9 +56,9 @@ public abstract class PreparedDatabase {
         modules.add(module3);
         moduleRepository.saveAllAndFlush(modules);
 
-        Lesson lesson1 = new Lesson("Title1", "Text1", module1);
-        Lesson lesson2 = new Lesson("Title2", "Text2", module2);
-        Lesson lesson3 = new Lesson("Title3", "Text3", module3);
+        Lesson lesson1 = new Lesson("Title1", "Text1", "Author1", module1);
+        Lesson lesson2 = new Lesson("Title2", "Text2", "Author2", module2);
+        Lesson lesson3 = new Lesson("Title3", "Text3", "Author3", module3);
         ArrayList<Lesson> lessons = new ArrayList<>();
         lessons.add(lesson1);
         lessons.add(lesson2);
@@ -74,9 +74,9 @@ public abstract class PreparedDatabase {
         roles.add(role3);
         roleRepository.saveAllAndFlush(roles);
 
-        UserPrincipal userPrincipal1 = new UserPrincipal("user1", "pass1");
-        UserPrincipal userPrincipal2 = new UserPrincipal("user2", "pass2");
-        UserPrincipal userPrincipal3 = new UserPrincipal("user3", "pass3");
+        UserPrincipal userPrincipal1 = new UserPrincipal("user1", "pass1", "nickname1", "email1");
+        UserPrincipal userPrincipal2 = new UserPrincipal("user2", "pass2", "nickname2", "email2");
+        UserPrincipal userPrincipal3 = new UserPrincipal("user3", "pass3", "nickname3", "email3");
         ArrayList<UserPrincipal> users = new ArrayList<>();
         users.add(userPrincipal1);
         users.add(userPrincipal2);

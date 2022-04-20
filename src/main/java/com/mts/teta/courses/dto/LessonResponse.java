@@ -4,13 +4,15 @@ public class LessonResponse {
     private Long id;
     private String title;
     private String text;
+    private String author;
     private Long moduleId;
     private String actionDescription;
 
-    public LessonResponse(Long id, String title, String text, Long moduleId, String actionDescription) {
+    public LessonResponse(Long id, String title, String text, String author, Long moduleId, String actionDescription) {
         this.id = id;
         this.title = title;
         this.text = text;
+        this.author = author;
         this.moduleId = moduleId;
         this.actionDescription = actionDescription;
     }
@@ -37,6 +39,22 @@ public class LessonResponse {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Long getModuleId() {
+        return moduleId;
+    }
+
+    public void setModuleId(Long moduleId) {
+        this.moduleId = moduleId;
     }
 
     public Long getCourseId() {

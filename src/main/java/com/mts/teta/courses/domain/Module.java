@@ -1,6 +1,7 @@
 package com.mts.teta.courses.domain;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +23,9 @@ public class Module {
     @Column
     private String description;
 
+    @Column(name = "date_created")
+    private Timestamp dateCreated;
+
     @OneToMany(mappedBy = "module", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Lesson> lessons;
 
@@ -37,6 +41,7 @@ public class Module {
         this.author = author;
         this.description = description;
         this.course = course;
+        this.dateCreated = new Timestamp(System.currentTimeMillis());
     }
 
     public Long getModuleId() {

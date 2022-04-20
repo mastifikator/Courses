@@ -83,7 +83,7 @@ public class CourseController {
     }
 
     @Secured("ROLE_ADMIN")
-    @GetMapping("/{courseId}/users")
+    @GetMapping("/course/{courseId}/users")
     public Set<UserResponse> getUsersFromCourse(@PathVariable Long courseId) {
         statisticsCounter.countHandlerCall(USERS_FOUND_ANSWER + courseId);
 

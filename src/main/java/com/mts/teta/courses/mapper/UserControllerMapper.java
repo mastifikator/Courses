@@ -9,6 +9,8 @@ public class UserControllerMapper {
     public UserResponse mapUserToUserResponse(UserPrincipal userPrincipal, String actionResponse) {
         return new UserResponse(userPrincipal.getUserId(),
                 userPrincipal.getUsername(),
+                userPrincipal.getNickname(),
+                userPrincipal.getEmail(),
                 actionResponse);
     }
 }

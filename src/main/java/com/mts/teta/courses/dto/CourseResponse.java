@@ -6,13 +6,15 @@ public class CourseResponse {
     private Long id;
     private String author;
     private String title;
+    private String description;
     private String actionDescription;
     private Set<UserResponse> assignedUsers;
 
-    public CourseResponse(Long id, String author, String title, String actionDescription, Set<UserResponse> assignedUsers) {
+    public CourseResponse(Long id, String author, String title, String description, String actionDescription, Set<UserResponse> assignedUsers) {
         this.id = id;
         this.author = author;
         this.title = title;
+        this.description = description;
         this.actionDescription = actionDescription;
         this.assignedUsers = assignedUsers;
     }
@@ -39,6 +41,14 @@ public class CourseResponse {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getActionDescription() {

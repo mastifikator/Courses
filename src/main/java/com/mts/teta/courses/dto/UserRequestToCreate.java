@@ -9,6 +9,12 @@ public class UserRequestToCreate {
     @NotBlank(message = "password must be filled")
     private String password;
 
+    @NotBlank(message = "nickname must be filled")
+    private String nickname;
+
+    @NotBlank(message = "email must be filled")
+    private String email;
+
     public UserRequestToCreate() {
     }
 
@@ -28,10 +34,29 @@ public class UserRequestToCreate {
         this.password = password;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "UserRequestToCreate{" +
                 "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

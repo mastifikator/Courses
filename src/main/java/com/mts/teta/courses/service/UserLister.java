@@ -32,13 +32,19 @@ public class UserLister {
         return userRepository.findById(userId).orElseThrow();
     }
 
+    public UserPrincipal userByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow();
+    }
+
     public UserPrincipal createUser(UserRequestToCreate request) {
+
         UserPrincipal userPrincipal = new UserPrincipal(request.getUsername(),
-                passwordEncoder.encode(request.getPassword()));
+                passwordEncoder.encode(request.getPassword()), request.getNickname(), request.getEmail());
 
         userRepository.save(userPrincipal);
         return userPrincipal;
     }
+
 
     public UserPrincipal updateUser(Long userId, UserRequestToUpdate request) {
         UserPrincipal userPrincipal = userRepository.getById(userId);

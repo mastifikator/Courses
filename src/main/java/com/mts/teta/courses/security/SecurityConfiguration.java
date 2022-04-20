@@ -43,14 +43,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void authConfigure(AuthenticationManagerBuilder auth, PasswordEncoder encoder) throws Exception {
+    public void authConfigure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(userDetailService)
-                .and()
-                .inMemoryAuthentication()
-                .withUser("admin")
-                .password(encoder.encode("admin"))
-                .roles("ADMIN");
+                .userDetailsService(userDetailService);
+//                .and()
+//                .inMemoryAuthentication()
+//                .withUser("admin")
+//                .password(encoder.encode("admin"))
+//                .roles("ADMIN");
     }
 
 

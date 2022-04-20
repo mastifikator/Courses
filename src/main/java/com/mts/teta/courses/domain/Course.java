@@ -1,6 +1,7 @@
 package com.mts.teta.courses.domain;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -21,6 +22,18 @@ public class Course {
     @Column
     private String title;
 
+    @Column
+    private String description;
+
+    @Column
+    private Integer rating;
+
+    @Column
+    private String tag;
+
+    @Column(name = "date_created")
+    private Timestamp dateCreated;
+
     @OneToMany(mappedBy = "course", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Module> modules;
 
@@ -35,9 +48,11 @@ public class Course {
     public Course() {
     }
 
-    public Course(String author, String title) {
+    public Course(String author, String title, String description) {
         this.author = author;
         this.title = title;
+        this.description = description;
+        this.dateCreated = new Timestamp(System.currentTimeMillis());
     }
 
     public Long getCourseId() {
@@ -64,6 +79,38 @@ public class Course {
         this.title = title;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public Timestamp getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Timestamp dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
     public List<Module> getModules() {
         return modules;
     }
@@ -85,11 +132,11 @@ public class Course {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return Objects.equals(courseId, course.courseId) && Objects.equals(author, course.author) && Objects.equals(title, course.title);
+        return Objects.equals(courseId, course.courseId) && Objects.equals(author, course.author) && Objects.equals(title, course.title) && Objects.equals(description, course.description) && Objects.equals(rating, course.rating) && Objects.equals(tag, course.tag) && Objects.equals(modules, course.modules) && Objects.equals(users, course.users);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(courseId, author, title);
+        return Objects.hash(courseId, author, title, description, rating, tag, modules, users);
     }
 }

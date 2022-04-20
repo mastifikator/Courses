@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponse createCourse(@Valid @RequestBody UserRequestToCreate request) {
+    public UserResponse createUser(@Valid @RequestBody UserRequestToCreate request) {
         statisticsCounter.countHandlerCall(CREATE_ANSWER + request);
 
         return userControllerMapper
