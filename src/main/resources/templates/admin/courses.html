@@ -15,7 +15,11 @@
                         <th>ID</th>
                         <th>Title</th>
                         <th>Author</th>
-                        <th>Go!</th>
+                        <th>dateCreated</th>
+                        <th>changeAuthor</th>
+                        <th>dateChanged</th>
+                        <th>tag</th>
+                        <th>Redact</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -23,14 +27,21 @@
                         <td th:text="${course.id}"/>
                         <td th:text="${course.title}"/>
                         <td th:text="${course.author}"/>
+                        <td th:text="${course.dateCreated}"/>
+                        <td th:text="${course.changeAuthor}"/>
+                        <td th:text="${course.dateChanged}"/>
+                        <td th:text="${course.tag}"/>
                         <td>
-                            <form action="#" th:action="@{'/learn/{id}'(id=${course.id})}" th:method="get">
-                                <button class="btn btn-primary" type="submit" id="submitButton">Учить</button>
+                            <form action="#" th:action="@{'/admin/courses/{id}'(id=${course.id})}" th:method="get">
+                                <button type="submit" id="submitButton" class="btn btn-primary">Редактировать</button>
                             </form>
                         </td>
                     </tr>
                     </tbody>
                 </table>
+                <form action="#" th:action="@{/admin/courses/create}" th:method="get">
+                    <button type="submit" id="submitButton" class="btn btn-primary">Создать новый курс</button>
+                </form>
             </div>
         </main>
 

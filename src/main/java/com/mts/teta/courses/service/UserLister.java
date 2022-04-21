@@ -5,12 +5,15 @@ import com.mts.teta.courses.dao.UserRepository;
 import com.mts.teta.courses.domain.Course;
 import com.mts.teta.courses.domain.Role;
 import com.mts.teta.courses.domain.UserPrincipal;
+import com.mts.teta.courses.dto.UI.UserRequestToChange;
 import com.mts.teta.courses.dto.UserRequestToCreate;
 import com.mts.teta.courses.dto.UserRequestToUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -38,10 +41,21 @@ public class UserLister {
 
     public UserPrincipal createUser(UserRequestToCreate request) {
 
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("Username already exist!");
+        }
+
         UserPrincipal userPrincipal = new UserPrincipal(request.getUsername(),
-                passwordEncoder.encode(request.getPassword()), request.getNickname(), request.getEmail());
+                passwordEncoder.encode(request.getPassword()),
+                request.getNickname(),
+                request.getEmail());
 
         userRepository.save(userPrincipal);
+
+        for (Role role : request.getRoles()) {
+            assignedRoleToUser(role.getRoleId(), userPrincipal.getUserId());
+        }
+
         return userPrincipal;
     }
 
@@ -49,6 +63,8 @@ public class UserLister {
     public UserPrincipal updateUser(Long userId, UserRequestToUpdate request) {
         UserPrincipal userPrincipal = userRepository.getById(userId);
         userPrincipal.setUsername(request.getUsername());
+        userPrincipal.setNickname(request.getNickname());
+        userPrincipal.setEmail(request.getEmail());
         userPrincipal.setPassword(passwordEncoder.encode(request.getPassword()));
 
         userRepository.save(userPrincipal);
@@ -79,6 +95,10 @@ public class UserLister {
         return userPrincipal;
     }
 
+    public List<UserPrincipal> getAllUsers() {
+        return userRepository.findAll();
+    }
+
     public Set<Role> getRolesByUserId(Long userId) {
         return userRepository.getById(userId).getRoles();
     }
@@ -86,4 +106,32 @@ public class UserLister {
     public UserPrincipal saveUser(UserPrincipal user) {
         return userRepository.saveAndFlush(user);
     }
+
+    //Methods for UI
+
+    public void changeUserFromUI(Long userId, UserRequestToChange userRequestToChange) {
+        UserPrincipal userPrincipal = userRepository.getById(userId);
+
+        if (!userRequestToChange.getUsername().equals("")) {
+            userPrincipal.setUsername(userRequestToChange.getUsername());
+        }
+
+        if (!userRequestToChange.getNickname().equals("")) {
+            userPrincipal.setNickname(userRequestToChange.getNickname());
+        }
+
+        if (!userRequestToChange.getEmail().equals("")) {
+            userPrincipal.setEmail(userRequestToChange.getEmail());
+        }
+
+        if (!userRequestToChange.getPassword().equals("")) {
+            userPrincipal.setPassword(passwordEncoder.encode(userRequestToChange.getPassword()));
+        }
+
+        userPrincipal.setChangedDate(new Timestamp(System.currentTimeMillis()));
+        userPrincipal.setChangeAuthor(userById(userId).getUsername());
+
+        userRepository.save(userPrincipal);
+    }
+
 }

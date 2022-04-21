@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head th:insert="fragments/head :: head"></head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<div class="container-fluid">
+    <div class="row vh-100">
+
+        <main class="ms-sm-auto px-md-4 h-100">
+            <h2 th:text="${title}"/>
+            <div class="table-responsive">
+
+                <form method="post" th:action="@{/admin/users/create}" th:object="${userRequestToCreate}"
+                      class="col card p-3 mb-5">
+                    <div class="form-group">
+                        <label for="username">Логин</label>
+                        <input id="username" placeholder="Введите новый логин" required type="text"
+                               th:field="*{username}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="nickname">Никнейм</label>
+                        <input id="nickname" placeholder="Введите новый ник" required type="text" th:field="*{nickname}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Почта</label>
+                        <input id="email" placeholder="Введите новую почту" required type="text" th:field="*{email}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Пароль</label>
+                        <input id="password" placeholder="Введите новый пароль" required type="text"
+                               th:field="*{password}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="roles">Роли</label>
+                        <select id="roles" required th:field="*{roles}" class="form-control">
+                            <option th:each="role : ${allroles}"
+                                    th:value="${role.roleId}"
+                                    th:text="${role.name}">
+                            </option>
+                        </select>
+                    </div>
+                    <br>
+                    <input type="submit" class="btn btn-primary" value="Создать">
+                </form>
+            </div>
+        </main>
+
+    </div>
+</div>
+<footer th:insert="fragments/footer :: footer" class="footer mt-auto py-3 bg-light fixed-bottom"></footer>
+</body>
+</html>

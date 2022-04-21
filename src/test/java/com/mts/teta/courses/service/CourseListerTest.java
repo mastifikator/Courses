@@ -105,7 +105,7 @@ class CourseListerTest extends PreparedDatabase {
     @Test
     @Transactional
     void saveCourse() {
-        Course course = new Course("Author5", "Title5");
+        Course course = new Course("Author5", "Title5", "Description5");
         courseLister.saveCourse(course);
 
         assertEquals(course, courseLister.coursesByTitlePrefix("Title5").get(0));

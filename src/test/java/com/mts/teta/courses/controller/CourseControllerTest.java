@@ -9,7 +9,7 @@ import com.mts.teta.courses.mapper.UserControllerMapper;
 import com.mts.teta.courses.service.CourseLister;
 import com.mts.teta.courses.service.LessonLister;
 import com.mts.teta.courses.service.StatisticsCounter;
-import com.mts.teta.courses.service.UserAuthService;
+import com.mts.teta.courses.security.UserAuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -80,6 +80,7 @@ class CourseControllerTest {
         CourseRequestToCreate courseRequestToCreate = new CourseRequestToCreate();
         courseRequestToCreate.setTitle("Valid course title");
         courseRequestToCreate.setAuthor("author");
+        courseRequestToCreate.setDescription("description");
 
         mockMvc.perform(post("/course")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -110,6 +111,7 @@ class CourseControllerTest {
         CourseRequestToUpdate courseRequestToUpdate = new CourseRequestToUpdate();
         courseRequestToUpdate.setTitle("Valid title");
         courseRequestToUpdate.setAuthor("author");
+        courseRequestToUpdate.setDescription("description");
 
         mockMvc.perform(put("/course/1")
                         .contentType(MediaType.APPLICATION_JSON)

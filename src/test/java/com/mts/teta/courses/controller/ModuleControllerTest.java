@@ -1,8 +1,6 @@
 package com.mts.teta.courses.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mts.teta.courses.dto.LessonRequestToCreate;
-import com.mts.teta.courses.dto.LessonRequestToUpdate;
 import com.mts.teta.courses.dto.ModuleRequestToCreate;
 import com.mts.teta.courses.dto.ModuleRequestToUpdate;
 import com.mts.teta.courses.handler.CustomAccessDeniedHandler;
@@ -11,10 +9,9 @@ import com.mts.teta.courses.mapper.ModuleControllerMapper;
 import com.mts.teta.courses.service.LessonLister;
 import com.mts.teta.courses.service.ModuleLister;
 import com.mts.teta.courses.service.StatisticsCounter;
-import com.mts.teta.courses.service.UserAuthService;
+import com.mts.teta.courses.security.UserAuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,7 +20,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;

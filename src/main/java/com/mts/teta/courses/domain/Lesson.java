@@ -16,7 +16,6 @@ public class Lesson {
     @Column
     private String title;
 
-    @Lob
     @Column
     private String text;
 
@@ -88,6 +87,7 @@ public class Lesson {
     public void setModule(Module module) {
         this.module = module;
     }
+
 
     @Override
     public boolean equals(Object o) {

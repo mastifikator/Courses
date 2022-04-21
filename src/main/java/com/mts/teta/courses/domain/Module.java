@@ -92,17 +92,16 @@ public class Module {
         this.lessons = lessons;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Module module = (Module) o;
-        return Objects.equals(moduleId, module.moduleId) && Objects.equals(title, module.title) && Objects.equals(author, module.author) && Objects.equals(description, module.description);
+        return Objects.equals(moduleId, module.moduleId) && Objects.equals(title, module.title) && Objects.equals(author, module.author) && Objects.equals(description, module.description) && Objects.equals(dateCreated, module.dateCreated);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(moduleId, title, author, description);
+        return Objects.hash(moduleId, title, author, description, dateCreated);
     }
 }

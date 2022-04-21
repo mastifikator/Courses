@@ -1,14 +1,13 @@
 package com.mts.teta.courses.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mts.teta.courses.dto.CourseRequestToCreate;
 import com.mts.teta.courses.dto.LessonRequestToCreate;
 import com.mts.teta.courses.dto.LessonRequestToUpdate;
 import com.mts.teta.courses.handler.CustomAccessDeniedHandler;
 import com.mts.teta.courses.mapper.LessonControllerMapper;
 import com.mts.teta.courses.service.LessonLister;
 import com.mts.teta.courses.service.StatisticsCounter;
-import com.mts.teta.courses.service.UserAuthService;
+import com.mts.teta.courses.security.UserAuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -64,6 +62,7 @@ class LessonControllerTest {
         LessonRequestToCreate lessonRequestToCreate = new LessonRequestToCreate();
         lessonRequestToCreate.setTitle("Valid title");
         lessonRequestToCreate.setText("text");
+        lessonRequestToCreate.setAuthor("author");
         lessonRequestToCreate.setModuleId(1L);
 
         mockMvc.perform(post("/lesson")
@@ -96,6 +95,7 @@ class LessonControllerTest {
         LessonRequestToUpdate lessonRequestToUpdate = new LessonRequestToUpdate();
         lessonRequestToUpdate.setTitle("Valid title");
         lessonRequestToUpdate.setText("text");
+        lessonRequestToUpdate.setAuthor("author");
 
         mockMvc.perform(put("/lesson/1")
                         .contentType(MediaType.APPLICATION_JSON)

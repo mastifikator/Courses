@@ -1,4 +1,4 @@
-package com.mts.teta.courses.service;
+package com.mts.teta.courses.security;
 
 import com.mts.teta.courses.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

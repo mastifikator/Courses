@@ -34,6 +34,12 @@ public class UserPrincipal {
     @Column(name = "registration_date")
     private Timestamp registrationDate;
 
+    @Column(name = "date_changed")
+    private Timestamp changedDate;
+
+    @Column(name = "change_author")
+    private String changeAuthor;
+
     @ManyToMany(mappedBy = "users")
     private Set<Course> courses = new HashSet<>();
 
@@ -91,6 +97,30 @@ public class UserPrincipal {
         this.avatar = avatar;
     }
 
+    public Timestamp getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Timestamp registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public Timestamp getChangedDate() {
+        return changedDate;
+    }
+
+    public void setChangedDate(Timestamp changedDate) {
+        this.changedDate = changedDate;
+    }
+
+    public String getChangeAuthor() {
+        return changeAuthor;
+    }
+
+    public void setChangeAuthor(String changeAuthor) {
+        this.changeAuthor = changeAuthor;
+    }
+
     public Set<Course> getCourses() {
         return courses;
     }
@@ -120,11 +150,11 @@ public class UserPrincipal {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserPrincipal that = (UserPrincipal) o;
-        return Objects.equals(userId, that.userId) && Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(nickname, that.nickname) && Objects.equals(email, that.email) && Objects.equals(courses, that.courses) && Objects.equals(roles, that.roles);
+        return Objects.equals(userId, that.userId) && Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(nickname, that.nickname) && Objects.equals(email, that.email) && Objects.equals(registrationDate, that.registrationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, username, password, nickname, email, courses, roles);
+        return Objects.hash(userId, username, password, nickname, email, registrationDate);
     }
 }

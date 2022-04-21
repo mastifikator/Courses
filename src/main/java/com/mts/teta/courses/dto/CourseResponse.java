@@ -10,7 +10,12 @@ public class CourseResponse {
     private String actionDescription;
     private Set<UserResponse> assignedUsers;
 
-    public CourseResponse(Long id, String author, String title, String description, String actionDescription, Set<UserResponse> assignedUsers) {
+    public CourseResponse(Long id,
+                          String author,
+                          String title,
+                          String description,
+                          String actionDescription,
+                          Set<UserResponse> assignedUsers) {
         this.id = id;
         this.author = author;
         this.title = title;

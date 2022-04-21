@@ -1,17 +1,24 @@
 package com.mts.teta.courses.security;
 
 import com.mts.teta.courses.handler.CustomAccessDeniedHandler;
-import com.mts.teta.courses.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -31,15 +38,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic()
                 .and()
-                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
+//                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
                 .and()
                 .formLogin()
+                .loginPage("/login")
+                .permitAll()
                 .and()
-                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler);
+                .logout()
+                .permitAll();
     }
 
     @Autowired
@@ -52,6 +65,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                .password(encoder.encode("admin"))
 //                .roles("ADMIN");
     }
-
-
 }

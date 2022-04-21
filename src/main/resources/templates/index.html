@@ -25,12 +25,13 @@
                         <td th:text="${course.author}"/>
                         <td>
                             <form action="#" th:action="@{'/learn/{id}'(id=${course.id})}" th:method="get">
-                                <button type="submit" id="submitButton">Learn</button>
+                                <button type="submit" id="submitButton" class="btn btn-primary">Учить</button>
                             </form>
                         </td>
                     </tr>
                     </tbody>
                 </table>
+            </div>
         </main>
 
     </div>

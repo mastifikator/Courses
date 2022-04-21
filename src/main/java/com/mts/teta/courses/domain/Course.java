@@ -34,6 +34,12 @@ public class Course {
     @Column(name = "date_created")
     private Timestamp dateCreated;
 
+    @Column(name = "change_author")
+    private String changeAuthor;
+
+    @Column(name = "date_changed")
+    private Timestamp dateChanged;
+
     @OneToMany(mappedBy = "course", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Module> modules;
 
@@ -111,6 +117,22 @@ public class Course {
         this.dateCreated = dateCreated;
     }
 
+    public String getChangeAuthor() {
+        return changeAuthor;
+    }
+
+    public void setChangeAuthor(String changeAuthor) {
+        this.changeAuthor = changeAuthor;
+    }
+
+    public Timestamp getDateChanged() {
+        return dateChanged;
+    }
+
+    public void setDateChanged(Timestamp dateChanged) {
+        this.dateChanged = dateChanged;
+    }
+
     public List<Module> getModules() {
         return modules;
     }
@@ -132,11 +154,11 @@ public class Course {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return Objects.equals(courseId, course.courseId) && Objects.equals(author, course.author) && Objects.equals(title, course.title) && Objects.equals(description, course.description) && Objects.equals(rating, course.rating) && Objects.equals(tag, course.tag) && Objects.equals(modules, course.modules) && Objects.equals(users, course.users);
+        return Objects.equals(courseId, course.courseId) && Objects.equals(author, course.author) && Objects.equals(title, course.title) && Objects.equals(description, course.description) && Objects.equals(rating, course.rating) && Objects.equals(tag, course.tag) && Objects.equals(dateCreated, course.dateCreated);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(courseId, author, title, description, rating, tag, modules, users);
+        return Objects.hash(courseId, author, title, description, rating, tag, dateCreated);
     }
 }
