@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head th:insert="fragments/head :: head"></head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<div class="container-fluid">
+    <div class="row vh-100">
+
+        <main class="ms-sm-auto px-md-4 h-100">
+            <h2 th:text="${title}"/>
+            <div class="table-responsive">
+
+                <form method="post" th:action="@{'/admin/modules/create/{id}'(id=${course.courseId})}"
+                      th:object="${moduleRequestToCreate}"
+                      class="col card p-3 mb-5">
+                    <div class="form-group">
+                        <label for="username">Название</label>
+                        <input id="username" placeholder="Введите название модуля" required type="text"
+                               th:field="*{title}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="nickname">Автор</label>
+                        <input id="nickname" placeholder="Введите имя автора" required type="text" th:field="*{author}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Description</label>
+                        <input id="email" placeholder="Введите Описание модуля" required type="text"
+                               th:field="*{description}"
+                               class="form-control"/>
+                    </div>
+                    <br>
+                    <input type="submit" class="btn btn-primary" value="Создать">
+                </form>
+            </div>
+        </main>
+
+    </div>
+</div>
+<footer th:insert="fragments/footer :: footer" class="footer mt-auto py-3 bg-light fixed-bottom"></footer>
+</body>
+</html>

@@ -7,6 +7,7 @@ public class CourseResponse {
     private String author;
     private String title;
     private String description;
+    private String tag;
     private String actionDescription;
     private Set<UserResponse> assignedUsers;
 
@@ -14,12 +15,14 @@ public class CourseResponse {
                           String author,
                           String title,
                           String description,
+                          String tag,
                           String actionDescription,
                           Set<UserResponse> assignedUsers) {
         this.id = id;
         this.author = author;
         this.title = title;
         this.description = description;
+        this.tag = tag;
         this.actionDescription = actionDescription;
         this.assignedUsers = assignedUsers;
     }
@@ -54,6 +57,14 @@ public class CourseResponse {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public String getActionDescription() {

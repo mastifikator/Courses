@@ -25,6 +25,12 @@ public class Lesson {
     @Column(name = "date_created")
     private Timestamp dateCreated;
 
+    @Column
+    private String changeAuthor;
+
+    @Column(name = "date_changed")
+    private Timestamp dateChanged;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "module_id")
     private Module module;
@@ -78,6 +84,22 @@ public class Lesson {
 
     public void setDateCreated(Timestamp dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public String getChangeAuthor() {
+        return changeAuthor;
+    }
+
+    public void setChangeAuthor(String changeAuthor) {
+        this.changeAuthor = changeAuthor;
+    }
+
+    public Timestamp getDateChanged() {
+        return dateChanged;
+    }
+
+    public void setDateChanged(Timestamp dateChanged) {
+        this.dateChanged = dateChanged;
     }
 
     public Module getModule() {

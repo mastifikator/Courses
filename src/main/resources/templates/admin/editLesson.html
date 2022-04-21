@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head th:insert="fragments/head :: head"></head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<div class="container-fluid">
+    <div class="row vh-100">
+
+        <main class="ms-sm-auto px-md-4 h-100">
+            <h2 th:text="${title}"/>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>ID</th>
+                        <th>title</th>
+                        <th>author</th>
+                        <th>text</th>
+                        <th>dateCreated</th>
+                        <th>changeAuthor</th>
+                        <th>dateChanged</th>
+                    </tr>
+                    <tr>
+                        <td th:text="${lesson.lessonId}"></td>
+                        <td th:text="${lesson.title}"></td>
+                        <td th:text="${lesson.author}"></td>
+                        <td th:text="${lesson.text}"></td>
+                        <td th:text="${course.dateCreated}"></td>
+                        <td th:text="${course.changeAuthor}"></td>
+                        <td th:text="${course.dateChanged}"></td>
+                    </tr>
+                </table>
+                <form method="post"
+                      th:action="@{'/admin/courses/{courseId}/modules/{moduleId}/lessons/edit/{lessonId}'(
+                      courseId=${course.courseId},
+                      moduleId=${module.moduleId},
+                      lessonId=${lesson.lessonId})}"
+                      th:object="${lessonRequestToUpdate}"
+                      class="col card p-3 mb-5">
+                    <div class="form-group">
+                        <label for="username">Название</label>
+                        <input id="username" placeholder="Введите название Урока" required type="text"
+                               th:field="*{title}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="nickname">Автор</label>
+                        <input id="nickname" placeholder="Введите имя автора" required type="text" th:field="*{author}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Описание</label>
+                        <input id="email" placeholder="Введите Описание урока" required type="text" th:field="*{text}"
+                               class="form-control"/>
+                    </div>
+                    <br>
+                    <input type="submit" class="btn btn-primary" value="Изменить урок">
+                </form>
+            </div>
+        </main>
+
+    </div>
+</div>
+<footer th:insert="fragments/footer :: footer" class="footer mt-auto py-3 bg-light fixed-bottom"></footer>
+</body>
+</html>

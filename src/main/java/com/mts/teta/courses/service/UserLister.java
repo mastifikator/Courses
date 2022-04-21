@@ -2,7 +2,6 @@ package com.mts.teta.courses.service;
 
 import com.mts.teta.courses.dao.RoleRepository;
 import com.mts.teta.courses.dao.UserRepository;
-import com.mts.teta.courses.domain.Course;
 import com.mts.teta.courses.domain.Role;
 import com.mts.teta.courses.domain.UserPrincipal;
 import com.mts.teta.courses.dto.UI.UserRequestToChange;
@@ -62,12 +61,21 @@ public class UserLister {
 
     public UserPrincipal updateUser(Long userId, UserRequestToUpdate request) {
         UserPrincipal userPrincipal = userRepository.getById(userId);
+
         userPrincipal.setUsername(request.getUsername());
         userPrincipal.setNickname(request.getNickname());
         userPrincipal.setEmail(request.getEmail());
         userPrincipal.setPassword(passwordEncoder.encode(request.getPassword()));
+        userPrincipal.setChangedDate(new Timestamp(System.currentTimeMillis()));
 
         userRepository.save(userPrincipal);
+
+        unassignedAllRoleFromUser(userPrincipal.getUserId());
+
+        for (Role role : request.getRoles()) {
+            assignedRoleToUser(role.getRoleId(), userPrincipal.getUserId());
+        }
+
         return userPrincipal;
     }
 
@@ -93,6 +101,14 @@ public class UserLister {
 
         roleRepository.save(role);
         return userPrincipal;
+    }
+
+    public void unassignedAllRoleFromUser(Long userId) {
+        Set<Role> allUserRoles = getRolesByUserId(userId);
+
+        for (Role role : allUserRoles) {
+            unassignedRoleFromUser(role.getRoleId(), userId);
+        }
     }
 
     public List<UserPrincipal> getAllUsers() {

@@ -22,7 +22,11 @@ public class ModuleLister {
 
     public Module createModule(ModuleRequestToCreate request) {
         Course course = courseLister.courseById(request.getCourseId());
-        Module module = new Module(request.getTitle(), request.getAuthor(), request.getDescription(), course);
+        Module module = new Module(request.getTitle(),
+                request.getAuthor(),
+                request.getDescription(),
+                course);
+
         moduleRepository.save(module);
         return module;
     }

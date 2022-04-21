@@ -8,6 +8,7 @@ import com.mts.teta.courses.dto.LessonRequestToUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Component
@@ -21,7 +22,11 @@ public class LessonLister {
 
     public Lesson createLesson(LessonRequestToCreate request) {
         Module module = moduleLister.moduleById(request.getModuleId());
-        Lesson lesson = new Lesson(request.getTitle(), request.getText(), request.getAuthor(), module);
+        Lesson lesson = new Lesson(request.getTitle(),
+                request.getText(),
+                request.getAuthor(),
+                module);
+
         lessonRepository.save(lesson);
         return lesson;
     }
@@ -31,6 +36,8 @@ public class LessonLister {
         lesson.setTitle(request.getTitle());
         lesson.setText(request.getText());
         lesson.setAuthor(request.getAuthor());
+        lesson.setDateChanged(new Timestamp(System.currentTimeMillis()));
+
         lessonRepository.save(lesson);
         return lesson;
     }

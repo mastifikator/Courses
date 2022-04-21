@@ -21,6 +21,7 @@ public class CourseControllerMapper {
                 course.getAuthor(),
                 course.getTitle(),
                 course.getDescription(),
+                course.getTag(),
                 actionDescription,
                 course.getUsers() == null ? Collections.emptySet() : course.getUsers()
                         .stream()

@@ -9,6 +9,7 @@ import com.mts.teta.courses.dto.CourseRequestToUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
@@ -38,15 +39,23 @@ public class CourseLister {
 
     public Course updateCourse(Long courseId, CourseRequestToUpdate request) {
         Course course = repository.getById(courseId);
+
         course.setAuthor(request.getAuthor());
         course.setTitle(request.getTitle());
         course.setDescription(request.getDescription());
+        course.setTag(request.getTag());
+        course.setDateChanged(new Timestamp(System.currentTimeMillis()));
+
         repository.save(course);
         return course;
     }
 
     public Course createCourse(CourseRequestToCreate request) {
-        Course course = new Course(request.getAuthor(), request.getTitle(), request.getDescription());
+        Course course = new Course(request.getAuthor(),
+                request.getTitle(),
+                request.getDescription(),
+                request.getTag());
+
         repository.save(course);
         return course;
     }

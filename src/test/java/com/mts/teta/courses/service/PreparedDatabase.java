@@ -38,9 +38,9 @@ public abstract class PreparedDatabase {
     @BeforeEach
     @Transactional
     void prepareDatabase() {
-        Course course1 = new Course("Author1", "Title1", "Description1");
-        Course course2 = new Course("Author2", "Title2", "Description2");
-        Course course3 = new Course("Author3", "Title3", "Description3");
+        Course course1 = new Course("Author1", "Title1", "Description1", "tag1");
+        Course course2 = new Course("Author2", "Title2", "Description2", "tag2");
+        Course course3 = new Course("Author3", "Title3", "Description3", "tag3");
         ArrayList<Course> courses = new ArrayList<>();
         courses.add(course1);
         courses.add(course2);

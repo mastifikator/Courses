@@ -12,6 +12,8 @@ public class CourseRequestToCreate {
     private String title;
     @NotBlank(message = "Course description has to be filled")
     private String description;
+    @NotBlank(message = "Course tag has to be filled")
+    private String tag;
 
     public String getAuthor() {
         return author;
@@ -35,6 +37,14 @@ public class CourseRequestToCreate {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     @Override

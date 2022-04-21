@@ -20,6 +20,7 @@
                         <th>dateChanged</th>
                         <th>tag</th>
                         <th>Redact</th>
+                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -32,8 +33,14 @@
                         <td th:text="${course.dateChanged}"/>
                         <td th:text="${course.tag}"/>
                         <td>
-                            <form action="#" th:action="@{'/admin/courses/{id}'(id=${course.id})}" th:method="get">
+                            <form action="#" th:action="@{'/admin/courses/edit/{id}'(id=${course.id})}" th:method="get">
                                 <button type="submit" id="submitButton" class="btn btn-primary">Редактировать</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="#" th:action="@{'/admin/courses/delete/{id}'(id=${course.id})}"
+                                  th:method="post">
+                                <button type="submit" id="submitButton" class="btn btn-danger">Удалить</button>
                             </form>
                         </td>
                     </tr>

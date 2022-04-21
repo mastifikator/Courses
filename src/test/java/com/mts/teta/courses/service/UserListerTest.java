@@ -3,10 +3,8 @@ package com.mts.teta.courses.service;
 import com.mts.teta.courses.domain.UserPrincipal;
 import com.mts.teta.courses.dto.UserRequestToCreate;
 import com.mts.teta.courses.dto.UserRequestToUpdate;
-import com.mts.teta.enricher.models.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import javax.transaction.Transactional;
 

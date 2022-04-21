@@ -1,12 +1,12 @@
 package com.mts.teta.courses.controller.UI;
 
-import com.mts.teta.courses.domain.Role;
-import com.mts.teta.courses.dto.UserRequestToCreate;
+import com.mts.teta.courses.domain.Course;
+import com.mts.teta.courses.domain.Lesson;
+import com.mts.teta.courses.domain.Module;
+import com.mts.teta.courses.dto.*;
+import com.mts.teta.courses.dto.UI.UserRequestToChange;
 import com.mts.teta.courses.mapper.admin.CourseAdminMapper;
-import com.mts.teta.courses.service.CourseLister;
-import com.mts.teta.courses.service.RoleLister;
-import com.mts.teta.courses.service.StatisticsCounter;
-import com.mts.teta.courses.service.UserLister;
+import com.mts.teta.courses.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +25,12 @@ public class AdminController {
 
     @Autowired
     private CourseLister courseLister;
+
+    @Autowired
+    private ModuleLister moduleLister;
+
+    @Autowired
+    private LessonLister lessonLister;
 
     @Autowired
     private CourseAdminMapper courseAdminMapper;
@@ -88,6 +94,26 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
+    @GetMapping("/users/edit/{userId}")
+    public String userEdit(@PathVariable Long userId, Model model) {
+        statisticsCounter.countHandlerCall("admin edit user");
+
+        model.addAttribute("title", "Панель администратора, Изменение пользователя");
+        model.addAttribute("userRequestToUpdate", new UserRequestToUpdate());
+        model.addAttribute("user", userLister.userById(userId));
+        model.addAttribute("allroles", roleLister.getAllRoles());
+
+        return "/admin/editUser.html";
+    }
+
+    @PostMapping("/users/edit/{userId}")
+    public String userEditForm(@ModelAttribute UserRequestToUpdate userRequestToUpdate,
+                               @PathVariable Long userId) {
+        userLister.updateUser(userId, userRequestToUpdate);
+
+        return "redirect:/admin/users";
+    }
+
     @PostMapping("/users/delete/{userId}")
     public String userDeleteForm(@PathVariable Long userId) {
         userLister.deleteUser(userId);
@@ -96,4 +122,177 @@ public class AdminController {
     }
 
     //Course
+
+    @GetMapping("/courses/create")
+    public String courseCreate(Model model) {
+        statisticsCounter.countHandlerCall("admin create course");
+
+        model.addAttribute("title", "Панель администратора, Создание курса");
+        model.addAttribute("courseRequestToCreate", new CourseRequestToCreate());
+
+        return "/admin/createCourse.html";
+    }
+
+    @PostMapping("/courses/create")
+    public String courseCreateForm(@ModelAttribute CourseRequestToCreate courseRequestToCreate) {
+        courseLister.createCourse(courseRequestToCreate);
+
+        return "redirect:/admin/courses";
+    }
+
+    @GetMapping("/courses/edit/{courseId}")
+    public String courseEdit(@PathVariable Long courseId, Model model) {
+        statisticsCounter.countHandlerCall("admin edit course");
+
+        model.addAttribute("title", "Панель администратора, Изменение курса");
+        model.addAttribute("courseRequestToUpdate", new CourseRequestToUpdate());
+        model.addAttribute("course", courseLister.courseById(courseId));
+        model.addAttribute("modules", moduleLister.modulesByCourseId(courseId));
+
+        return "/admin/editCourse.html";
+    }
+
+    @PostMapping("/courses/edit/{courseId}")
+    public String courseEditForm(@ModelAttribute CourseRequestToUpdate courseRequestToUpdate,
+                                 @PathVariable Long courseId) {
+        courseLister.updateCourse(courseId, courseRequestToUpdate);
+
+        return "redirect:/admin/courses";
+    }
+
+    @PostMapping("/courses/delete/{courseId}")
+    public String courseDeleteForm(@PathVariable Long courseId) {
+        courseLister.deleteCourse(courseId);
+
+        return "redirect:/admin/courses";
+    }
+
+    //Module
+
+    @GetMapping("/modules/create/{courseId}")
+    public String moduleCreate(@PathVariable Long courseId,
+                               Model model) {
+        Course course = courseLister.courseById(courseId);
+        statisticsCounter.countHandlerCall("admin create module");
+
+        model.addAttribute("title", "Панель администратора, Создание модуля для курса " + course.getTitle());
+        model.addAttribute("moduleRequestToCreate", new ModuleRequestToCreate());
+        model.addAttribute("course", course);
+
+        return "/admin/createModule.html";
+    }
+
+    @PostMapping("/modules/create/{courseId}")
+    public String moduleCreateForm(@ModelAttribute ModuleRequestToCreate moduleRequestToCreate,
+                                   @PathVariable Long courseId) {
+        moduleLister.createModule(moduleRequestToCreate);
+
+        return "redirect:/admin/courses/edit/" + courseId;
+    }
+
+    @GetMapping("/courses/{courseId}/modules/edit/{moduleId}")
+    public String moduleEdit(@PathVariable Long courseId,
+                             @PathVariable Long moduleId,
+                             Model model) {
+        Course course = courseLister.courseById(courseId);
+        Module module = moduleLister.moduleById(moduleId);
+        statisticsCounter.countHandlerCall("admin edit module");
+
+        model.addAttribute("title", "Панель администратора, Изменение модуля " +
+                module.getTitle() + ", курса " +
+                course.getTitle());
+
+        model.addAttribute("moduleRequestToUpdate", new ModuleRequestToUpdate());
+        model.addAttribute("course", course);
+        model.addAttribute("module", module);
+        model.addAttribute("lessons", lessonLister.lessonsByModuleId(moduleId));
+
+        return "/admin/editModule.html";
+    }
+
+    @PostMapping("/courses/{courseId}/modules/edit/{moduleId}")
+    public String moduleEditForm(@ModelAttribute ModuleRequestToUpdate moduleRequestToUpdate,
+                                 @PathVariable Long courseId,
+                                 @PathVariable Long moduleId) {
+        moduleLister.updateModule(moduleId, moduleRequestToUpdate);
+
+        return "redirect:/admin/courses/edit/" + courseId;
+    }
+
+    @PostMapping("/courses/{courseId}/modules/delete/{moduleId}")
+    public String moduleDeleteForm(@PathVariable Long courseId,
+                                   @PathVariable Long moduleId) {
+        moduleLister.deleteModule(moduleId);
+
+        return "redirect:/admin/courses/edit/" + courseId;
+    }
+
+    //Lesson
+    @GetMapping("/courses/{courseId}/modules/{moduleId}/lessons/create")
+    public String lessonCreate(@PathVariable Long courseId,
+                               @PathVariable Long moduleId,
+                               Model model) {
+        Course course = courseLister.courseById(courseId);
+        Module module = moduleLister.moduleById(moduleId);
+        statisticsCounter.countHandlerCall("admin create lesson");
+
+        model.addAttribute("title", "Панель администратора, Создание Урока для модуля " + module.getTitle());
+        model.addAttribute("lessonRequestToCreate", new LessonRequestToCreate());
+        model.addAttribute("course", course);
+        model.addAttribute("module", module);
+
+        return "/admin/createLesson.html";
+    }
+
+    @PostMapping("/courses/{courseId}/modules/{moduleId}/lessons/create")
+    public String lessonCreateForm(@ModelAttribute LessonRequestToCreate lessonRequestToCreate,
+                                   @PathVariable Long courseId,
+                                   @PathVariable Long moduleId) {
+        lessonLister.createLesson(lessonRequestToCreate);
+
+        return "redirect:/admin/courses/" + courseId + "/modules/edit/" + moduleId;
+    }
+
+    @GetMapping("/courses/{courseId}/modules/{moduleId}/lessons/edit/{lessonId}")
+    public String lessonEdit(@PathVariable Long courseId,
+                             @PathVariable Long moduleId,
+                             @PathVariable Long lessonId,
+                             Model model) {
+        Course course = courseLister.courseById(courseId);
+        Module module = moduleLister.moduleById(moduleId);
+        Lesson lesson = lessonLister.lessonById(lessonId);
+        statisticsCounter.countHandlerCall("admin edit lesson");
+
+        model.addAttribute("title", "Панель администратора, Изменение урока " +
+                course.getTitle() + ", модуля " +
+                module.getTitle());
+
+        model.addAttribute("lessonRequestToUpdate", new LessonRequestToUpdate());
+        model.addAttribute("course", course);
+        model.addAttribute("module", module);
+        model.addAttribute("lesson", lesson);
+
+        return "/admin/editLesson.html";
+    }
+
+    @PostMapping("/courses/{courseId}/modules/{moduleId}/lessons/edit/{lessonId}")
+    public String lessonEditForm(@ModelAttribute LessonRequestToUpdate lessonRequestToUpdate,
+                                 @PathVariable Long courseId,
+                                 @PathVariable Long moduleId,
+                                 @PathVariable Long lessonId) {
+        lessonLister.updateLesson(lessonId, lessonRequestToUpdate);
+
+        return "redirect:/admin/courses/" + courseId + "/modules/edit/" + moduleId;
+    }
+
+    @PostMapping("/courses/{courseId}/modules/{moduleId}/lessons/delete/{lessonId}")
+    public String lessonDeleteForm(@PathVariable Long courseId,
+                                   @PathVariable Long moduleId,
+                                   @PathVariable Long lessonId) {
+        lessonLister.deleteLesson(lessonId);
+
+        return "redirect:/admin/courses/" + courseId + "/modules/edit/" + moduleId;
+    }
+
+
 }

@@ -54,10 +54,11 @@ public class Course {
     public Course() {
     }
 
-    public Course(String author, String title, String description) {
+    public Course(String author, String title, String description, String tag) {
         this.author = author;
         this.title = title;
         this.description = description;
+        this.tag = tag;
         this.dateCreated = new Timestamp(System.currentTimeMillis());
     }
 

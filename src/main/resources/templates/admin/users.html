@@ -37,7 +37,7 @@
                         <td th:text="${user.changeAuthor}"/>
                         <td th:text="${user.changedDate}"/>
                         <td>
-                            <form action="#" th:action="@{'/admin/users/{id}'(id=${user.userId})}" th:method="get">
+                            <form action="#" th:action="@{'/admin/users/edit/{id}'(id=${user.userId})}" th:method="get">
                                 <button type="submit" id="submitButton" class="btn btn-primary">Редактировать</button>
                             </form>
                         </td>
