@@ -4,7 +4,7 @@
 <body>
 <div th:insert="fragments/header :: header"></div>
 <div class="container-fluid">
-    <div class="row vh-100">
+    <div class="row">
 
         <main class="ms-sm-auto px-md-4 h-100">
             <h2 th:text="${title}"/>
@@ -37,24 +37,24 @@
                       class="col card p-3 mb-5">
                     <div class="form-group">
                         <label for="username">Название</label>
-                        <input id="username" placeholder="Введите название курса" required type="text"
+                        <input id="username" placeholder="Введите название курса" type="text"
                                th:field="*{title}"
                                class="form-control"/>
                     </div>
                     <div class="form-group">
                         <label for="nickname">Автор</label>
-                        <input id="nickname" placeholder="Введите имя автора" required type="text" th:field="*{author}"
+                        <input id="nickname" placeholder="Введите имя автора" type="text" th:field="*{author}"
                                class="form-control"/>
                     </div>
                     <div class="form-group">
                         <label for="email">Описание</label>
-                        <input id="email" placeholder="Введите Описание курса" required type="text"
+                        <input id="email" placeholder="Введите Описание курса" type="text"
                                th:field="*{description}"
                                class="form-control"/>
                     </div>
                     <div class="form-group">
                         <label for="password">Тэг</label>
-                        <input id="password" placeholder="Введите тэг" required type="text"
+                        <input id="password" placeholder="Введите тэг" type="text"
                                th:field="*{tag}"
                                class="form-control"/>
                     </div>
@@ -110,6 +110,6 @@
 
     </div>
 </div>
-<footer th:insert="fragments/footer :: footer" class="footer mt-auto py-3 bg-light fixed-bottom"></footer>
+<footer th:insert="fragments/footer :: footer" class="footer mt-auto py-3 bg-light bottom"></footer>
 </body>
 </html>

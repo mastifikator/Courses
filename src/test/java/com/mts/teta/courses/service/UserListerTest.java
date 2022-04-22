@@ -39,6 +39,8 @@ class UserListerTest extends PreparedDatabase {
         UserRequestToUpdate userRequestToUpdate = new UserRequestToUpdate();
         userRequestToUpdate.setUsername("user3_new");
         userRequestToUpdate.setPassword("pass3_new");
+        userRequestToUpdate.setNickname("nickname");
+        userRequestToUpdate.setEmail("email");
 
         UserPrincipal userPrincipal = userLister.updateUser(3L, userRequestToUpdate);
 

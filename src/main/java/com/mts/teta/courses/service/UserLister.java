@@ -4,6 +4,7 @@ import com.mts.teta.courses.dao.RoleRepository;
 import com.mts.teta.courses.dao.UserRepository;
 import com.mts.teta.courses.domain.Role;
 import com.mts.teta.courses.domain.UserPrincipal;
+import com.mts.teta.courses.dto.UI.RequestToRegistration;
 import com.mts.teta.courses.dto.UI.UserRequestToChange;
 import com.mts.teta.courses.dto.UserRequestToCreate;
 import com.mts.teta.courses.dto.UserRequestToUpdate;
@@ -62,18 +63,28 @@ public class UserLister {
     public UserPrincipal updateUser(Long userId, UserRequestToUpdate request) {
         UserPrincipal userPrincipal = userRepository.getById(userId);
 
-        userPrincipal.setUsername(request.getUsername());
-        userPrincipal.setNickname(request.getNickname());
-        userPrincipal.setEmail(request.getEmail());
-        userPrincipal.setPassword(passwordEncoder.encode(request.getPassword()));
+        if (!request.getUsername().equals("")) {
+            userPrincipal.setUsername(request.getUsername());
+        }
+        if (!request.getNickname().equals("")) {
+            userPrincipal.setNickname(request.getNickname());
+        }
+        if (!request.getEmail().equals("")) {
+            userPrincipal.setEmail(request.getEmail());
+        }
+        if (!request.getPassword().equals("")) {
+            userPrincipal.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
         userPrincipal.setChangedDate(new Timestamp(System.currentTimeMillis()));
 
         userRepository.save(userPrincipal);
 
         unassignedAllRoleFromUser(userPrincipal.getUserId());
 
-        for (Role role : request.getRoles()) {
-            assignedRoleToUser(role.getRoleId(), userPrincipal.getUserId());
+        if (request.getRoles() != null) {
+            for (Role role : request.getRoles()) {
+                assignedRoleToUser(role.getRoleId(), userPrincipal.getUserId());
+            }
         }
 
         return userPrincipal;
@@ -109,6 +120,18 @@ public class UserLister {
         for (Role role : allUserRoles) {
             unassignedRoleFromUser(role.getRoleId(), userId);
         }
+    }
+
+    public boolean isStudent(UserPrincipal user) {
+        boolean result = false;
+
+        for (Role role : user.getRoles()) {
+            if (role.getName().equals("ROLE_STUDENT")) {
+                result = true;
+            }
+        }
+
+        return result;
     }
 
     public List<UserPrincipal> getAllUsers() {
@@ -148,6 +171,23 @@ public class UserLister {
         userPrincipal.setChangeAuthor(userById(userId).getUsername());
 
         userRepository.save(userPrincipal);
+    }
+
+    public UserPrincipal createUserFromRegistration(RequestToRegistration request) {
+
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("Username already exist!");
+        }
+
+        UserPrincipal userPrincipal = new UserPrincipal(request.getUsername(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getNickname(),
+                request.getEmail());
+
+        userRepository.save(userPrincipal);
+        assignedRoleToUser(1L, userPrincipal.getUserId());
+
+        return userPrincipal;
     }
 
 }

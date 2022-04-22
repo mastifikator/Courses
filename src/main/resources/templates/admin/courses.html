@@ -4,7 +4,7 @@
 <body>
 <div th:insert="fragments/header :: header"></div>
 <div class="container-fluid">
-    <div class="row vh-100">
+    <div class="row">
 
         <main class="ms-sm-auto px-md-4 h-100">
             <h2 th:text="${title}"/>
@@ -54,6 +54,6 @@
 
     </div>
 </div>
-<footer th:insert="fragments/footer :: footer" class="footer mt-auto py-3 bg-light fixed-bottom"></footer>
+<footer th:insert="fragments/footer :: footer" class="footer mt-auto py-3 bg-light bottom"></footer>
 </body>
 </html>

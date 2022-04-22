@@ -3,7 +3,9 @@ package com.mts.teta.courses.controller.UI;
 import com.mts.teta.courses.domain.Course;
 import com.mts.teta.courses.domain.Lesson;
 import com.mts.teta.courses.domain.Module;
+import com.mts.teta.courses.domain.UserPrincipal;
 import com.mts.teta.courses.dto.*;
+import com.mts.teta.courses.dto.UI.UserRequestToAssign;
 import com.mts.teta.courses.dto.UI.UserRequestToChange;
 import com.mts.teta.courses.mapper.admin.CourseAdminMapper;
 import com.mts.teta.courses.service.*;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 @Controller
@@ -96,12 +99,23 @@ public class AdminController {
 
     @GetMapping("/users/edit/{userId}")
     public String userEdit(@PathVariable Long userId, Model model) {
-        statisticsCounter.countHandlerCall("admin edit user");
+        UserPrincipal user = userLister.userById(userId);
+        statisticsCounter.countHandlerCall("admin edit user " + userId);
 
         model.addAttribute("title", "Панель администратора, Изменение пользователя");
         model.addAttribute("userRequestToUpdate", new UserRequestToUpdate());
+        model.addAttribute("userRequestToAssign", new UserRequestToAssign());
         model.addAttribute("user", userLister.userById(userId));
         model.addAttribute("allroles", roleLister.getAllRoles());
+        model.addAttribute("allcourses", courseLister.getAllCourses());
+
+        if (userLister.isStudent(user)) {
+            model.addAttribute("courses", courseLister.getAllCoursesForUser(user));
+            model.addAttribute("isStudent", "true");
+        } else {
+            model.addAttribute("courses", Collections.emptySet());
+            model.addAttribute("isStudent", "false");
+        }
 
         return "/admin/editUser.html";
     }
@@ -119,6 +133,24 @@ public class AdminController {
         userLister.deleteUser(userId);
 
         return "redirect:/admin/users";
+    }
+
+    @PostMapping("/users/{userId}/courses/assign")
+    public String userAssignToCourse(@ModelAttribute UserRequestToAssign userRequestToAssign,
+                                     @PathVariable Long userId) {
+
+        courseLister.assignedUserToCourse(userRequestToAssign.getCourseId(), userId);
+
+        return "redirect:/admin/users/edit/" + userId;
+    }
+
+    @PostMapping("/users/{userId}/courses/{courseId}/unassigned")
+    public String userUnassignedFromCourse(@PathVariable Long userId,
+                                           @PathVariable Long courseId) {
+
+        courseLister.unassignedUserToCourse(courseId, userId);
+
+        return "redirect:/admin/users/edit/" + userId;
     }
 
     //Course

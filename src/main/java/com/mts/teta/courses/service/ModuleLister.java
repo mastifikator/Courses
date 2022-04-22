@@ -6,6 +6,7 @@ import com.mts.teta.courses.domain.Lesson;
 import com.mts.teta.courses.domain.Module;
 import com.mts.teta.courses.dto.ModuleRequestToCreate;
 import com.mts.teta.courses.dto.ModuleRequestToUpdate;
+import liquibase.pro.packaged.z;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,9 +34,17 @@ public class ModuleLister {
 
     public Module updateModule(Long moduleId, ModuleRequestToUpdate request) {
         Module module = moduleRepository.getById(moduleId);
-        module.setTitle(request.getTitle());
-        module.setAuthor(request.getAuthor());
-        module.setDescription(request.getDescription());
+
+        if (!request.getTitle().equals("")) {
+            module.setTitle(request.getTitle());
+        }
+        if (!request.getAuthor().equals("")) {
+            module.setAuthor(request.getAuthor());
+        }
+        if (!request.getDescription().equals("")) {
+            module.setDescription(request.getDescription());
+        }
+
         moduleRepository.save(module);
         return module;
     }

@@ -18,7 +18,6 @@ public class UserRequestToUpdate {
     @NotBlank(message = "email must be filled")
     private String email;
 
-    @NotBlank(message = "roles must be filled")
     List<Role> roles;
 
     public UserRequestToUpdate() {

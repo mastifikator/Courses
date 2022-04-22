@@ -21,7 +21,6 @@ public class UserRequestToCreate {
     @NotBlank(message = "email must be filled")
     private String email;
 
-    @NotBlank(message = "roles must be filled")
     private List<Role> roles = new ArrayList<>();
 
     public UserRequestToCreate() {

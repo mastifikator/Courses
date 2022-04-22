@@ -6,6 +6,7 @@ import com.mts.teta.courses.domain.UserPrincipal;
 import com.mts.teta.courses.mapper.CourseControllerMapper;
 import com.mts.teta.courses.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
@@ -31,18 +32,22 @@ public class UIController {
     private LessonLister lessonLister;
 
     @Autowired
+    private UserLister userLister;
+
+    @Autowired
     private StatisticsCounter statisticsCounter;
 
     @Autowired
     private CourseControllerMapper courseControllerMapper;
 
     @GetMapping({"/", "/index"})
-    public String index(Model model) {
-        statisticsCounter.countHandlerCall("getCourses");
+    public String index(Model model, Authentication auth) {
+        UserPrincipal user = userLister.userByUsername(auth.getName());
+        statisticsCounter.countHandlerCall("getCourses for " + user.getUserId());
 
         model.addAttribute("title", "Добро пожаловать на образовательную платформу!");
         model.addAttribute("courses", courseLister
-                .getAllCourses()
+                .getAllCoursesForUser(user)
                 .stream()
                 .map(c -> courseControllerMapper.mapCourseToCourseResponse(c, GET_ANSWER))
                 .collect(Collectors.toList()));
@@ -51,11 +56,14 @@ public class UIController {
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam(value = "titlePrefix", required = false) String titlePrefix, Model model) {
-        statisticsCounter.countHandlerCall("searchCourses");
+    public String search(@RequestParam(value = "titlePrefix", required = false) String titlePrefix,
+                         Model model,
+                         Authentication auth) {
+        UserPrincipal user = userLister.userByUsername(auth.getName());
+        statisticsCounter.countHandlerCall("searchCourses for " + user.getUserId());
 
         model.addAttribute("title", "Результаты поиска по запросу " + titlePrefix);
-        model.addAttribute("courses", courseLister.coursesByTitlePrefix(titlePrefix)
+        model.addAttribute("courses", courseLister.coursesByTitlePrefixForUser(user, titlePrefix)
                 .stream()
                 .map(c -> courseControllerMapper.mapCourseToCourseResponse(c, GET_ANSWER))
                 .collect(Collectors.toList()));
@@ -64,14 +72,20 @@ public class UIController {
     }
 
     @GetMapping("/learn/{courseId}")
-    public String learnCourse(@PathVariable("courseId") Long courseId, Model model) {
-        statisticsCounter.countHandlerCall("learnCourse " + courseId);
-
+    public String learnCourse(@PathVariable("courseId") Long courseId,
+                              Model model,
+                              Authentication auth) {
+        UserPrincipal user = userLister.userByUsername(auth.getName());
         Course course = courseLister.courseById(courseId);
-        model.addAttribute("title", "Добро пожаловать на курс " +
+        statisticsCounter.countHandlerCall("User " + user.getUserId() + " learnCourse " + courseId);
+
+        if (userLister.isStudent(user) && !user.getCourses().contains(course)) {
+            throw new AccessDeniedException("Вам закрыт доступ к данному курсу, обратитесь к преподавателю");
+        }
+
+        model.addAttribute("title", user.getNickname() + ", добро пожаловать на курс " +
                 course.getTitle() + " от " +
                 course.getAuthor());
-
         model.addAttribute("course", course);
         model.addAttribute("modules", courseLister.getModulesFromCourse(courseId));
 
@@ -81,19 +95,33 @@ public class UIController {
     @GetMapping("/learn/{courseId}/lesson/{lessonId}")
     public String learnLesson(@PathVariable("courseId") Long courseId,
                               @PathVariable("lessonId") Long lessonId,
-                              Model model) {
-        statisticsCounter.countHandlerCall("learnLesson " + lessonId);
-
+                              Model model,
+                              Authentication auth) {
+        UserPrincipal user = userLister.userByUsername(auth.getName());
         Course course = courseLister.courseById(courseId);
         Lesson lesson = lessonLister.lessonById(lessonId);
-        model.addAttribute("title", "Курс " + course.getTitle() + ", урок " + lesson.getTitle());
+        statisticsCounter.countHandlerCall(user.getUserId() + " learnLesson " + lessonId);
 
+        if (userLister.isStudent(user) && !user.getCourses().contains(course)) {
+            throw new AccessDeniedException("Вам закрыт доступ к данному уроку, обратитесь к преподавателю");
+        }
+
+        model.addAttribute("title", "Курс " + course.getTitle() + ", урок " + lesson.getTitle());
         model.addAttribute("course", courseLister.courseById(courseId));
         model.addAttribute("modules", courseLister.getModulesFromCourse(courseId));
-
         model.addAttribute("lesson", lesson);
 
         return "learnLesson.html";
+    }
+
+    @GetMapping({"/accessDenied"})
+    public String accessDenied(Model model, Authentication auth) {
+        UserPrincipal user = userLister.userByUsername(auth.getName());
+        statisticsCounter.countHandlerCall("access denied for " + user.getUserId());
+
+        model.addAttribute("title", "Доступ запрещен!");
+
+        return "error.html";
     }
 
 }

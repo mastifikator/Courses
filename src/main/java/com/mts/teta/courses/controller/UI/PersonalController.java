@@ -1,6 +1,7 @@
 package com.mts.teta.courses.controller.UI;
 
 import com.mts.teta.courses.domain.UserPrincipal;
+import com.mts.teta.courses.dto.UI.RequestToRegistration;
 import com.mts.teta.courses.dto.UI.UserRequestToChange;
 import com.mts.teta.courses.service.StatisticsCounter;
 import com.mts.teta.courses.service.UserLister;
@@ -8,7 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.validation.Valid;
 
 @Controller
 public class PersonalController {
@@ -18,6 +24,32 @@ public class PersonalController {
 
     @Autowired
     private StatisticsCounter statisticsCounter;
+
+    //Registration
+
+    @GetMapping("/registration")
+    public String registration(Model model) {
+        statisticsCounter.countHandlerCall("registration");
+
+        model.addAttribute("title", "Форма регистрации");
+        model.addAttribute("requestToRegistration", new RequestToRegistration());
+
+        return "registration.html";
+    }
+
+    @PostMapping("/registration")
+    public String registration(@ModelAttribute @Valid RequestToRegistration requestToRegistration, Errors errors) {
+        statisticsCounter.countHandlerCall("registration " + requestToRegistration.getUsername());
+
+        if (errors.hasErrors()) {
+            return "registration.html";
+        } else {
+            userLister.createUserFromRegistration(requestToRegistration);
+            return "redirect:/login";
+        }
+    }
+
+    //Personal account page
 
     @GetMapping("/personal")
     public String personal(Authentication auth, Model model) {

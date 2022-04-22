@@ -33,9 +33,16 @@ public class LessonLister {
 
     public Lesson updateLesson(Long lessonId, LessonRequestToUpdate request) {
         Lesson lesson = lessonRepository.getById(lessonId);
-        lesson.setTitle(request.getTitle());
-        lesson.setText(request.getText());
-        lesson.setAuthor(request.getAuthor());
+
+        if (!request.getTitle().equals("")) {
+            lesson.setTitle(request.getTitle());
+        }
+        if (!request.getText().equals("")) {
+            lesson.setText(request.getText());
+        }
+        if (!request.getAuthor().equals("")) {
+            lesson.setAuthor(request.getAuthor());
+        }
         lesson.setDateChanged(new Timestamp(System.currentTimeMillis()));
 
         lessonRepository.save(lesson);

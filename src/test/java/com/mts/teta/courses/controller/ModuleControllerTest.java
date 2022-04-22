@@ -3,7 +3,6 @@ package com.mts.teta.courses.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mts.teta.courses.dto.ModuleRequestToCreate;
 import com.mts.teta.courses.dto.ModuleRequestToUpdate;
-import com.mts.teta.courses.handler.CustomAccessDeniedHandler;
 import com.mts.teta.courses.mapper.LessonControllerMapper;
 import com.mts.teta.courses.mapper.ModuleControllerMapper;
 import com.mts.teta.courses.service.LessonLister;
@@ -38,8 +37,6 @@ class ModuleControllerTest {
 
     @MockBean
     private UserAuthService userAuthService;
-    @MockBean
-    private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @MockBean
     private ModuleLister moduleLister;

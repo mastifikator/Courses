@@ -38,6 +38,7 @@ class LessonListerTest extends PreparedDatabase {
         LessonRequestToUpdate lessonRequestToUpdate = new LessonRequestToUpdate();
         lessonRequestToUpdate.setTitle("Title3_new");
         lessonRequestToUpdate.setText("Text3_new");
+        lessonRequestToUpdate.setAuthor("Author3_new");
 
         Lesson lesson = lessonLister.updateLesson(3L, lessonRequestToUpdate);
 

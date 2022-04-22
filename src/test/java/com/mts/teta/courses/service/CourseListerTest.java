@@ -43,6 +43,8 @@ class CourseListerTest extends PreparedDatabase {
         CourseRequestToUpdate courseRequestToUpdate = new CourseRequestToUpdate();
         courseRequestToUpdate.setTitle("Title3_new");
         courseRequestToUpdate.setAuthor("Author3_new");
+        courseRequestToUpdate.setDescription("Description3_new");
+        courseRequestToUpdate.setTag("Tag3_new");
 
         Course course = courseLister.updateCourse(3L, courseRequestToUpdate);
 
@@ -105,7 +107,7 @@ class CourseListerTest extends PreparedDatabase {
     @Test
     @Transactional
     void saveCourse() {
-        Course course = new Course("Author5", "Title5", "Description5");
+        Course course = new Course("Author5", "Title5", "Description5", "tag5");
         courseLister.saveCourse(course);
 
         assertEquals(course, courseLister.coursesByTitlePrefix("Title5").get(0));

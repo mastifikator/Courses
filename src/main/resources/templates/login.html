@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css">
-    <title>Login : Demo</title>
+    <title>MTS-Teta - LoginPage</title>
 </head>
 <body class="h-screen">
 <div class="container mx-auto h-full flex justify-center items-center text-black px-4">
@@ -15,14 +15,14 @@
         <form th:action="@{/login}" method="post" class="border-teal p-4 border-t-12 bg-white mb-6">
             <div class="mb-4">
                 <label for="username" class="font-bold text-lg block mb-2">Логин</label>
-                <input id="username" type="text" name="username" autocomplete="off"
+                <input id="username" type="text" name="username" autocomplete="off" required
                        class="block w-full rounded p-2 rounded shadow border focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
                        placeholder="Введи логин">
             </div>
 
             <div class="mb-4">
                 <label for="password" class="font-bold text-lg block mb-2">Пароль</label>
-                <input id="password" type="password" name="password" autocomplete="off"
+                <input id="password" type="password" name="password" autocomplete="off" required
                        class="block w-full rounded p-2 rounded shadow border focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
                        placeholder="Введи пароль">
             </div>
@@ -34,7 +34,8 @@
         </form>
         <div class="text-center pb-4">
             <p class="text-white text-sm">
-                Не знаешь что вводить? <a href="#" class="no-underline text-white-500 font-bold">Создай аккаунт!</a>.
+                Не знаешь что вводить? <a th:href="@{/registration}" class="no-underline text-white-500 font-bold">Создай
+                аккаунт!</a>.
             </p>
         </div>
     </div>
