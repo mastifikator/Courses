@@ -2,7 +2,9 @@ package com.mts.teta.courses.domain;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "lessons")
@@ -34,6 +36,14 @@ public class Lesson {
     @ManyToOne(optional = false)
     @JoinColumn(name = "module_id")
     private Module module;
+
+    @ManyToMany
+    @JoinTable(
+            name = "lessons_users",
+            joinColumns = @JoinColumn(name = "lesson_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<UserPrincipal> users = new HashSet<>();
 
     public Lesson() {
     }
@@ -110,6 +120,13 @@ public class Lesson {
         this.module = module;
     }
 
+    public Set<UserPrincipal> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<UserPrincipal> users) {
+        this.users = users;
+    }
 
     @Override
     public boolean equals(Object o) {

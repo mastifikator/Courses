@@ -3,6 +3,7 @@ package com.mts.teta.courses.controller.UI;
 import com.mts.teta.courses.domain.Course;
 import com.mts.teta.courses.domain.Lesson;
 import com.mts.teta.courses.domain.UserPrincipal;
+import com.mts.teta.courses.dto.UI.UserRequestToAssign;
 import com.mts.teta.courses.mapper.CourseControllerMapper;
 import com.mts.teta.courses.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,7 @@ import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.stream.Collectors;
@@ -110,8 +109,35 @@ public class UIController {
         model.addAttribute("course", courseLister.courseById(courseId));
         model.addAttribute("modules", courseLister.getModulesFromCourse(courseId));
         model.addAttribute("lesson", lesson);
+        model.addAttribute("user", user);
+
+        if (lessonLister.isPassed(lessonId, user.getUserId())) {
+            model.addAttribute("isPassed", "true");
+        } else {
+            model.addAttribute("isPassed", "false");
+        }
 
         return "learnLesson.html";
+    }
+
+    @PostMapping("/learn/{courseId}/lesson/{lessonId}/passed/{userId}")
+    public String passedLesson(@PathVariable Long courseId,
+                               @PathVariable Long lessonId,
+                               @PathVariable Long userId) {
+        statisticsCounter.countHandlerCall(userId + " passed " + lessonId);
+        lessonLister.passedLesson(lessonId, userId);
+
+        return "redirect:/learn/" + courseId + "/lesson/" + lessonId;
+    }
+
+    @PostMapping("/learn/{courseId}/lesson/{lessonId}/unpassed/{userId}")
+    public String unpassedLesson(@PathVariable Long courseId,
+                                 @PathVariable Long lessonId,
+                                 @PathVariable Long userId) {
+        statisticsCounter.countHandlerCall(userId + " unpassed " + lessonId);
+        lessonLister.unpassedLesson(lessonId, userId);
+
+        return "redirect:/learn/" + courseId + "/lesson/" + lessonId;
     }
 
     @GetMapping({"/accessDenied"})

@@ -46,6 +46,9 @@ public class UserPrincipal {
     @ManyToMany(mappedBy = "users")
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(mappedBy = "users")
+    private Set<Lesson> lessons = new HashSet<>();
+
     public UserPrincipal() {
     }
 
@@ -135,6 +138,14 @@ public class UserPrincipal {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Lesson> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(Set<Lesson> lessons) {
+        this.lessons = lessons;
     }
 
     public String getPassword() {

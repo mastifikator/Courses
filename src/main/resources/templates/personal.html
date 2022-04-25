@@ -60,6 +60,29 @@
                     <input type="submit" class="btn btn-primary" value="Изменить">
                 </form>
             </div>
+            <h2>Пройденные уроки</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Module</th>
+                        <th>Course</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="lesson: ${passedLessons}">
+                        <td th:text="${lesson.lessonId}"/>
+                        <td th:text="${lesson.title}"/>
+                        <td th:text="${lesson.author}"/>
+                        <td th:text="${lesson.module.title}"/>
+                        <td th:text="${lesson.module.course.title}"/>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </main>
 
     </div>

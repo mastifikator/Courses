@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.Collections;
 
 @Controller
 public class PersonalController {
@@ -60,6 +61,7 @@ public class PersonalController {
                 auth.getName());
         model.addAttribute("user", user);
         model.addAttribute("userRequestToChange", new UserRequestToChange());
+        model.addAttribute("passedLessons", user.getLessons());
 
         return "personal.html";
     }
