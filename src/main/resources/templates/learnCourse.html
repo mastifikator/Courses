@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head th:insert="fragments/head :: head"></head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<div class="container-fluid">
+    <div class="row vh-100">
+        <nav th:insert="fragments/nav :: nav" id="sidebarMenu"
+             class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse h-100"></nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 h-100">
+            <h2 th:text="${title}"/>
+            <div class="table-responsive">
+                <div class="table-responsive" th:text="${course.description}">
+                </div>
+        </main>
+
+    </div>
+</div>
+<footer th:insert="fragments/footer :: footer" class="footer mt-auto py-3 bg-light fixed-bottom"></footer>
+</body>
+</html>

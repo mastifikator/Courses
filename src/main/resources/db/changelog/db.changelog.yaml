@@ -270,3 +270,24 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_users
                     references: users(user_id)
+  - changeSet:
+      id: '2022220401'
+      author: 'Nikolay Vasilev'
+      changes:
+        - createTable:
+            tableName: 'lessons_users'
+            columns:
+              - column:
+                  name: lesson_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_lessons
+                    references: lessons(lesson_id)
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_users
+                    references: users(user_id)

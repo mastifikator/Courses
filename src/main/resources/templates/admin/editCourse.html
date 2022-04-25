@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head th:insert="fragments/head :: head"></head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<div class="container-fluid">
+    <div class="row">
+
+        <main class="ms-sm-auto px-md-4 h-100">
+            <h2 th:text="${title}"/>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>ID</th>
+                        <th>title</th>
+                        <th>description</th>
+                        <th>author</th>
+                        <th>tag</th>
+                        <th>dateCreated</th>
+                        <th>changeAuthor</th>
+                        <th>dateChanged</th>
+                    </tr>
+                    <tr>
+                        <td th:text="${course.courseId}"></td>
+                        <td th:text="${course.title}"></td>
+                        <td th:text="${course.description}"></td>
+                        <td th:text="${course.author}"></td>
+                        <td th:text="${course.tag}"></td>
+                        <td th:text="${course.dateCreated}"></td>
+                        <td th:text="${course.changeAuthor}"></td>
+                        <td th:text="${course.dateChanged}"></td>
+                    </tr>
+                </table>
+
+                <form method="post" th:action="@{'/admin/courses/edit/{id}'(id=${course.courseId})}"
+                      th:object="${courseRequestToUpdate}"
+                      class="col card p-3 mb-5">
+                    <div class="form-group">
+                        <label for="username">Название</label>
+                        <input id="username" placeholder="Введите название курса" type="text"
+                               th:field="*{title}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="nickname">Автор</label>
+                        <input id="nickname" placeholder="Введите имя автора" type="text" th:field="*{author}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Описание</label>
+                        <input id="email" placeholder="Введите Описание курса" type="text"
+                               th:field="*{description}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Тэг</label>
+                        <input id="password" placeholder="Введите тэг" type="text"
+                               th:field="*{tag}"
+                               class="form-control"/>
+                    </div>
+                    <br>
+                    <input type="submit" class="btn btn-primary" value="Изменить курс">
+                </form>
+            </div>
+            <h2>Модули</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Description</th>
+                        <th>Redact</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="module: ${modules}">
+                        <td th:text="${module.moduleId}"/>
+                        <td th:text="${module.title}"/>
+                        <td th:text="${module.author}"/>
+                        <td th:text="${module.description}"/>
+                        <td>
+                            <form action="#"
+                                  th:action="@{'/admin/courses/{courseId}/modules/edit/{moduleId}'(
+                                    courseId=${course.courseId},
+                                    moduleId=${module.moduleId})}"
+                                  th:method="get">
+                                <button type="submit" id="submitButton" class="btn btn-primary">Редактировать</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="#"
+                                  th:action="@{'/admin/courses/{courseId}/modules/delete/{moduleId}'(courseId=${course.courseId},
+                                  moduleId=${module.moduleId})}"
+                                  th:method="post">
+                                <button type="submit" id="submitButton" class="btn btn-danger">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <form action="#" th:action="@{'/admin/modules/create/{courseId}'(courseId=${course.courseId})}"
+                  th:method="get">
+                <button type="submit" id="submitButton" class="btn btn-primary">Создать новый модуль</button>
+            </form>
+        </main>
+
+    </div>
+</div>
+<footer th:insert="fragments/footer :: footer" class="footer mt-auto py-3 bg-light bottom"></footer>
+</body>
+</html>

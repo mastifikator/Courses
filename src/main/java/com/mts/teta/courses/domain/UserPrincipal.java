@@ -1,6 +1,7 @@
 package com.mts.teta.courses.domain;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -14,11 +15,30 @@ public class UserPrincipal {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column
+    @Column(unique = true)
     private String username;
 
     @Column
     private String password;
+
+    @Column(unique = true)
+    private String nickname;
+
+    @Column
+    private String email;
+
+    @Column(name = "avatar")
+    @Lob
+    private byte[] avatar;
+
+    @Column(name = "registration_date")
+    private Timestamp registrationDate;
+
+    @Column(name = "date_changed")
+    private Timestamp changedDate;
+
+    @Column(name = "change_author")
+    private String changeAuthor;
 
     @ManyToMany(mappedBy = "users")
     private Set<Course> courses = new HashSet<>();
@@ -26,12 +46,18 @@ public class UserPrincipal {
     @ManyToMany(mappedBy = "users")
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(mappedBy = "users")
+    private Set<Lesson> lessons = new HashSet<>();
+
     public UserPrincipal() {
     }
 
-    public UserPrincipal(String username, String password) {
+    public UserPrincipal(String username, String password, String nickname, String email) {
         this.username = username;
         this.password = password;
+        this.nickname = nickname;
+        this.email = email;
+        this.registrationDate = new Timestamp(System.currentTimeMillis());
     }
 
     public Long getUserId() {
@@ -50,6 +76,54 @@ public class UserPrincipal {
         this.username = username;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
+    }
+
+    public Timestamp getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Timestamp registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public Timestamp getChangedDate() {
+        return changedDate;
+    }
+
+    public void setChangedDate(Timestamp changedDate) {
+        this.changedDate = changedDate;
+    }
+
+    public String getChangeAuthor() {
+        return changeAuthor;
+    }
+
+    public void setChangeAuthor(String changeAuthor) {
+        this.changeAuthor = changeAuthor;
+    }
+
     public Set<Course> getCourses() {
         return courses;
     }
@@ -66,6 +140,14 @@ public class UserPrincipal {
         this.roles = roles;
     }
 
+    public Set<Lesson> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(Set<Lesson> lessons) {
+        this.lessons = lessons;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -78,12 +160,12 @@ public class UserPrincipal {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserPrincipal userPrincipal = (UserPrincipal) o;
-        return Objects.equals(userId, userPrincipal.userId) && Objects.equals(username, userPrincipal.username);
+        UserPrincipal that = (UserPrincipal) o;
+        return Objects.equals(userId, that.userId) && Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(nickname, that.nickname) && Objects.equals(email, that.email) && Objects.equals(registrationDate, that.registrationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, username);
+        return Objects.hash(userId, username, password, nickname, email, registrationDate);
     }
 }

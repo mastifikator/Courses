@@ -3,13 +3,12 @@ package com.mts.teta.courses.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mts.teta.courses.dto.CourseRequestToCreate;
 import com.mts.teta.courses.dto.CourseRequestToUpdate;
-import com.mts.teta.courses.handler.CustomAccessDeniedHandler;
 import com.mts.teta.courses.mapper.CourseControllerMapper;
 import com.mts.teta.courses.mapper.UserControllerMapper;
 import com.mts.teta.courses.service.CourseLister;
 import com.mts.teta.courses.service.LessonLister;
 import com.mts.teta.courses.service.StatisticsCounter;
-import com.mts.teta.courses.service.UserAuthService;
+import com.mts.teta.courses.security.UserAuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -39,8 +38,6 @@ class CourseControllerTest {
 
     @MockBean
     private UserAuthService userAuthService;
-    @MockBean
-    private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @MockBean
     private CourseLister courseLister;
@@ -80,6 +77,8 @@ class CourseControllerTest {
         CourseRequestToCreate courseRequestToCreate = new CourseRequestToCreate();
         courseRequestToCreate.setTitle("Valid course title");
         courseRequestToCreate.setAuthor("author");
+        courseRequestToCreate.setDescription("description");
+        courseRequestToCreate.setTag("tag");
 
         mockMvc.perform(post("/course")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -110,6 +109,8 @@ class CourseControllerTest {
         CourseRequestToUpdate courseRequestToUpdate = new CourseRequestToUpdate();
         courseRequestToUpdate.setTitle("Valid title");
         courseRequestToUpdate.setAuthor("author");
+        courseRequestToUpdate.setDescription("description");
+        courseRequestToUpdate.setTag("tag");
 
         mockMvc.perform(put("/course/1")
                         .contentType(MediaType.APPLICATION_JSON)

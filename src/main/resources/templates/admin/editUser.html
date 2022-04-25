@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head th:insert="fragments/head :: head"></head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<div class="container-fluid">
+    <div class="row">
+
+        <main class="ms-sm-auto px-md-4 h-100">
+            <h2 th:text="${title}"/>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>ID</th>
+                        <th>Логин</th>
+                        <th>Никнейм</th>
+                        <th>Почта</th>
+                        <th>Роли</th>
+                        <th>Дата создания</th>
+                        <th>Автор изменения</th>
+                        <th>Дата изменения</th>
+                    </tr>
+                    <tr>
+                        <td th:text="${user.userId}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.nickname}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:each="role : ${user.roles}">
+                            <div th:text="${role.name}"></div>
+                        </td>
+                        <td th:text="${user.registrationDate}"></td>
+                        <td th:text="${user.changeAuthor}"></td>
+                        <td th:text="${user.changedDate}"></td>
+                    </tr>
+                </table>
+
+                <form method="post" th:action="@{'/admin/users/edit/{id}'(id=${user.userId})}"
+                      th:object="${userRequestToUpdate}"
+                      class="col card p-3 mb-5">
+                    <div class="form-group">
+                        <label for="username">Логин</label>
+                        <input id="username" placeholder="Введите новый логин" type="text" th:field="*{username}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="nickname">Никнейм</label>
+                        <input id="nickname" placeholder="Введите новый ник" type="text" th:field="*{nickname}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Почта</label>
+                        <input id="email" placeholder="Введите новую почту" type="text" th:field="*{email}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Пароль</label>
+                        <input id="password" placeholder="Введите новый пароль" type="password" th:field="*{password}"
+                               class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="roles">Роли</label>
+                        <select id="roles" required th:field="*{roles}" class="form-control">
+                            <option th:each="role : ${allroles}"
+                                    th:value="${role.roleId}"
+                                    th:text="${role.name}">
+                            </option>
+                        </select>
+                    </div>
+                    <br>
+                    <input type="submit" class="btn btn-primary" value="Изменить">
+                </form>
+            </div>
+            <h2>Курсы доступные пользователю:</h2>
+            <div class="table-responsive" th:if="${isStudent == 'true'}">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Description</th>
+                        <th>Unassign</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="course: ${courses}">
+                        <td th:text="${course.courseId}"/>
+                        <td th:text="${course.title}"/>
+                        <td th:text="${course.author}"/>
+                        <td th:text="${course.description}"/>
+                        <td>
+                            <form action="#"
+                                  th:action="@{'/admin/users/{userId}/courses/{courseId}/unassigned'(
+                                    userId=${user.userId},
+                                    courseId=${course.courseId})}"
+                                  th:method="post">
+                                <button type="submit" id="submitButton" class="btn btn-danger">Отвязать</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <form method="post" th:action="@{'/admin/users/{userId}/courses/assign'(userId=${user.userId})}"
+                      th:object="${userRequestToAssign}"
+                      class="col card p-3 mb-5">
+                    <div class="form-group">
+                        <select id="courses" required th:field="*{courseId}" class="form-control">
+                            <option th:each="course : ${allcourses}"
+                                    th:value="${course.courseId}"
+                                    th:text="${course.title}">
+                            </option>
+                        </select>
+                    </div>
+                    <br>
+                    <input type="submit" class="btn btn-primary" value="Добавить курс">
+                </form>
+            </div>
+            <div class="table-responsive" th:unless="${isStudent == 'true'}">
+                <h3>Пользователям с ролью ROLE_ADMIN и ROLE_TEACHER доступны все курсы.</h3>
+            </div>
+        </main>
+
+    </div>
+</div>
+<footer th:insert="fragments/footer :: footer" class="footer mt-auto py-3 bg-light bottom"></footer>
+</body>
+</html>

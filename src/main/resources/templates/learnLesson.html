@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head th:insert="fragments/head :: head"></head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<div class="container-fluid">
+    <div class="row vh-100">
+        <nav th:insert="fragments/nav :: nav" id="sidebarMenu"
+             class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse h-100"></nav>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 h-100">
+            <h2 th:text="${title}"/>
+            <div class="table-responsive" th:text="${lesson.text}">
+                <br>
+            </div>
+            <div class="float-end" th:if="${isPassed == 'true'}">
+                <form action="#"
+                      th:action="@{'/learn/{courseId}/lesson/{lessonId}/unpassed/{userId}'(
+                                    courseId=${course.courseId},
+                                    lessonId=${lesson.lessonId},
+                                    userId=${user.userId})}"
+                      th:method="post">
+                    <button type="submit" id="submitButton" class="btn btn-outline-success">Возобновить урок</button>
+                </form>
+            </div>
+            <div class="float-end" th:unless="${isPassed == 'true'}">
+                <form action="#"
+                      th:action="@{'/learn/{courseId}/lesson/{lessonId}/passed/{userId}'(
+                                    courseId=${course.courseId},
+                                    lessonId=${lesson.lessonId},
+                                    userId=${user.userId})}"
+                      th:method="post">
+                    <button type="submit" id="submitButton" class="btn btn-success">Урок пройден</button>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+<footer th:insert="fragments/footer :: footer" class="footer mt-auto py-3 bg-light fixed-bottom"></footer>
+</body>
+</html>

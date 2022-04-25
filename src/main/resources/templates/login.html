@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css">
+    <title>MTS-Teta - LoginPage</title>
+</head>
+<body class="h-screen">
+<div class="container mx-auto h-full flex justify-center items-center text-black px-4">
+    <div class="md:w-1/3 shadow-xl rounded-2xl border bg-black w-full">
+        <h1 class="text-center font-medium text-2xl text-white rounded-t-2xl bg-black py-4">Вход</h1>
+        <form th:action="@{/login}" method="post" class="border-teal p-4 border-t-12 bg-white mb-6">
+            <div class="mb-4">
+                <label for="username" class="font-bold text-lg block mb-2">Логин</label>
+                <input id="username" type="text" name="username" autocomplete="off" required
+                       class="block w-full rounded p-2 rounded shadow border focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                       placeholder="Введи логин">
+            </div>
+
+            <div class="mb-4">
+                <label for="password" class="font-bold text-lg block mb-2">Пароль</label>
+                <input id="password" type="password" name="password" autocomplete="off" required
+                       class="block w-full rounded p-2 rounded shadow border focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                       placeholder="Введи пароль">
+            </div>
+            <div class="flex items-center justify-between">
+                <input class="bg-black text-white text-lg font-medium p-2 rounded inline-block w-full hover:bg-black transition duration-400 hover:shadow-lg"
+                       type="submit" value="Войти">
+            </div>
+
+        </form>
+        <div class="text-center pb-4">
+            <p class="text-white text-sm">
+                Не знаешь что вводить? <a th:href="@{/registration}" class="no-underline text-white-500 font-bold">Создай
+                аккаунт!</a>.
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

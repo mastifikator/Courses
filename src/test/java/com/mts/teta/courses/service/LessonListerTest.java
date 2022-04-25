@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.Async;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,6 +38,7 @@ class LessonListerTest extends PreparedDatabase {
         LessonRequestToUpdate lessonRequestToUpdate = new LessonRequestToUpdate();
         lessonRequestToUpdate.setTitle("Title3_new");
         lessonRequestToUpdate.setText("Text3_new");
+        lessonRequestToUpdate.setAuthor("Author3_new");
 
         Lesson lesson = lessonLister.updateLesson(3L, lessonRequestToUpdate);
 

@@ -10,6 +10,8 @@ public class LessonRequestToUpdate {
     private String title;
     @NotBlank(message = "Lesson text has to be filled")
     private String text;
+    @NotBlank(message = "Lesson author has to be filled")
+    private String author;
 
     public String getTitle() {
         return title;
@@ -27,11 +29,20 @@ public class LessonRequestToUpdate {
         this.text = text;
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     @Override
     public String toString() {
         return "LessonRequestToUpdate{" +
                 "title='" + title + '\'' +
                 ", text='" + text + '\'' +
+                ", author='" + author + '\'' +
                 '}';
     }
 }

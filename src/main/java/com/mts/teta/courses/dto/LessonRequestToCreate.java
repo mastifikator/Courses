@@ -14,6 +14,9 @@ public class LessonRequestToCreate {
     @NotBlank(message = "Text lesson has to be filled")
     private String text;
 
+    @NotBlank(message = "Author lesson has to be filled")
+    private String author;
+
     @NotNull(message = "ModuleId has to be filled")
     private Long moduleId;
 
@@ -31,6 +34,14 @@ public class LessonRequestToCreate {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public Long getModuleId() {

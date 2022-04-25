@@ -18,7 +18,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/course")
 public class CourseController {
     private final static String GET_ANSWER = "Course found";
     private final static String UPDATE_ANSWER = "Course Updated";
@@ -38,13 +37,13 @@ public class CourseController {
     @Autowired
     private UserControllerMapper userControllerMapper;
 
-    @GetMapping("/{courseId}")
+    @GetMapping("/course/{courseId}")
     public CourseResponse getCourse(@PathVariable("courseId") Long courseId) {
         statisticsCounter.countHandlerCall("getCourse " + courseId);
         return courseControllerMapper.mapCourseToCourseResponse(courseLister.courseById(courseId), GET_ANSWER);
     }
 
-    @GetMapping("/filteredCourses")
+    @GetMapping("/course/filteredCourses")
     public List<CourseResponse> getCoursesByTitlePrefix(@RequestParam(value = "titlePrefix", required = false) String titlePrefix) {
         statisticsCounter.countHandlerCall(FILTER_ANSWER + titlePrefix);
 
@@ -56,7 +55,7 @@ public class CourseController {
     }
 
     @Secured("ROLE_ADMIN")
-    @PostMapping
+    @PostMapping("/course")
     public CourseResponse createCourse(@Valid @RequestBody CourseRequestToCreate request) {
         statisticsCounter.countHandlerCall(CREATE_ANSWER + request);
 
@@ -66,7 +65,7 @@ public class CourseController {
     }
 
     @Secured("ROLE_ADMIN")
-    @PutMapping("/{courseId}")
+    @PutMapping("/course/{courseId}")
     public CourseResponse updateCourse(@PathVariable Long courseId,
                                        @Valid @RequestBody CourseRequestToUpdate request) {
         statisticsCounter.countHandlerCall(UPDATE_ANSWER + courseId + " " + request);
@@ -77,14 +76,14 @@ public class CourseController {
     }
 
     @Secured("ROLE_ADMIN")
-    @DeleteMapping("/{courseId}")
+    @DeleteMapping("/course/{courseId}")
     public void deleteCourse(@PathVariable Long courseId) {
         statisticsCounter.countHandlerCall(DELETE_ANSWER + courseId);
         courseLister.deleteCourse(courseId);
     }
 
     @Secured("ROLE_ADMIN")
-    @GetMapping("/{courseId}/users")
+    @GetMapping("/course/{courseId}/users")
     public Set<UserResponse> getUsersFromCourse(@PathVariable Long courseId) {
         statisticsCounter.countHandlerCall(USERS_FOUND_ANSWER + courseId);
 
@@ -95,7 +94,7 @@ public class CourseController {
     }
 
     @Secured("ROLE_ADMIN")
-    @PutMapping("/{courseId}/users/{userId}")
+    @PutMapping("/course/{courseId}/users/{userId}")
     public CourseResponse assignUserToCourse(@PathVariable("courseId") Long courseId,
                                              @PathVariable("userId") Long userId) {
 
@@ -105,7 +104,7 @@ public class CourseController {
     }
 
     @Secured("ROLE_ADMIN")
-    @DeleteMapping("/{courseId}/users/{userId}")
+    @DeleteMapping("/course/{courseId}/users/{userId}")
     public CourseResponse unassignedUserFromCourse(@PathVariable("courseId") Long courseId,
                                                    @PathVariable("userId") Long userId) {
 
